@@ -93,13 +93,13 @@
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
-            padding-top: 80px;
+            padding-top: 130px; /* Adjusted for fixed navbar and theme toggle */
         }
         
-        /* Theme Toggle Button */
+        /* Theme Toggle Button - Positioned below navbar */
         .theme-toggle {
             position: fixed;
-            top: 20px;
+            top: 80px; /* Below the navbar */
             right: 20px;
             width: 50px;
             height: 50px;
@@ -408,6 +408,52 @@
         
         .skills-list li:last-child {
             border-bottom: none;
+        }
+        
+        /* Education Section */
+        .education-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: var(--border);
+        }
+        
+        .education-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-bottom: 1px dashed rgba(94, 114, 235, 0.2);
+        }
+        
+        .education-item:last-child {
+            border-bottom: none;
+        }
+        
+        .education-details {
+            flex: 2;
+        }
+        
+        .education-qualification {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .education-board {
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+        
+        .education-year {
+            flex: 1;
+            text-align: right;
+            color: var(--text-light);
+            font-weight: 500;
         }
         
         .timeline {
@@ -737,6 +783,10 @@
         
         /* Media Queries */
         @media (max-width: 768px) {
+            body {
+                padding-top: 150px; /* Adjusted for mobile */
+            }
+            
             .navbar {
                 padding: 15px 0;
             }
@@ -764,6 +814,13 @@
             
             .mobile-menu-btn {
                 display: block;
+            }
+            
+            .theme-toggle {
+                top: 70px; /* Below navbar on mobile */
+                right: 15px;
+                width: 40px;
+                height: 40px;
             }
             
             .timeline::before {
@@ -831,17 +888,19 @@
                 font-size: 1.8rem;
             }
             
-            .theme-toggle {
-                top: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
+            .education-item {
+                flex-direction: column;
+            }
+            
+            .education-year {
+                text-align: left;
+                margin-top: 0.5rem;
             }
         }
     </style>
 </head>
 <body class="dark-theme">
-    <!-- Theme Toggle Button -->
+    <!-- Theme Toggle Button - Positioned below navbar -->
     <div class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon"></i>
     </div>
@@ -856,6 +915,7 @@
             <ul class="nav-links">
                 <li><a href="#home" class="active">Home</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="#education">Education</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
@@ -873,10 +933,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="profile-img">
-                    <!-- Local Profile Photo from src folder -->
-                    <img src="src/git_portfolio.profileimage.jpeg" 
-                         alt="Tanveer Alam Sheikh"
-                         onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop" 
+                         alt="Tanveer Alam Sheikh">
                 </div>
                 <h1 class="glow-on-hover">Tanveer Alam Sheikh</h1>
                 <div class="tagline">Certified Power BI Developer | Data Analyst | Business Insights Expert</div>
@@ -913,6 +971,38 @@
                 <p>With over <span class="highlight">7 years of experience</span> in Business Analysis and Data Analytics, I've gained a deep understanding of business operations, especially in the Insurance domain. As a Data Analyst, I focus on end-to-end BI solutions—from raw data to impactful dashboards.</p>
                 
                 <p>I've built domain-wide tools and reports for business heads, and my work has helped enhance operational efficiency across functions. My expertise includes designing automated reporting tools, improving ETL processes, and ensuring data governance compliance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="section" id="education">
+        <div class="container">
+            <h2 class="section-title">Education</h2>
+            <div class="education-container">
+                <div class="education-item">
+                    <div class="education-details">
+                        <div class="education-qualification">Bachelor in Management Studies</div>
+                        <div class="education-board">Mumbai University</div>
+                    </div>
+                    <div class="education-year">2014</div>
+                </div>
+                
+                <div class="education-item">
+                    <div class="education-details">
+                        <div class="education-qualification">XII</div>
+                        <div class="education-board">Maharashtra Board</div>
+                    </div>
+                    <div class="education-year">2011</div>
+                </div>
+                
+                <div class="education-item">
+                    <div class="education-details">
+                        <div class="education-qualification">X</div>
+                        <div class="education-board">CBSE</div>
+                    </div>
+                    <div class="education-year">2008</div>
+                </div>
             </div>
         </div>
     </section>
@@ -1026,68 +1116,118 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
+    <!-- Projects Section with all 10 projects -->
     <section class="section" id="projects">
         <div class="container">
             <h2 class="section-title">Key Projects</h2>
             <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Central MI Dashboard</div>
-                        <div class="project-year">2023</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Built a Power BI dashboard consolidating business data across multiple accounts for comprehensive reporting and analysis.</p>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Fabric Governance Tool</div>
-                        <div class="project-year">2024</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Developed a Fabric tenant administration tool using PowerShell and Power BI for enhanced governance and monitoring.</p>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Production Tracker</div>
-                        <div class="project-year">2025</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Replaced Microsoft Purview with an in-house monitoring solution for Power BI reports, improving oversight.</p>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">KPI Tool</div>
-                        <div class="project-year">2022</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Automated KPI tracking across teams with integrated performance metrics and visualization.</p>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Quality Tool</div>
-                        <div class="project-year">2019</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Developed an auditing workflow system that saved 1.5 FTE effort and reduced biased auditing practices.</p>
-                    </div>
-                </div>
-                
+                <!-- Project 1 -->
                 <div class="project-card">
                     <div class="project-header">
                         <div class="project-title">Report Automation</div>
                         <div class="project-year">2017</div>
                     </div>
                     <div class="project-content">
-                        <p>Automated BAU reports using Excel VBA, reducing manual effort by 50% and improving accuracy.</p>
+                        <p>Automated BAU reports using Excel VBA, reducing manual efforts by 50%.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Quality Tool</div>
+                        <div class="project-year">2019</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Developed an auditing workflow system, saving 1.5 FTE effort and reducing biased auditing.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Learning Module Tool</div>
+                        <div class="project-year">2021</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Created a training tracker for compliance, ensuring timely course completion.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 4 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Headcount Tool</div>
+                        <div class="project-year">2021</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Designed an employee inventory tracker for transparency in resource management.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 5 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">WFO Tool</div>
+                        <div class="project-year">2022</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Developed a workforce rostering tool to monitor office attendance.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 6 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">KPI Tool</div>
+                        <div class="project-year">2022</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Automated KPI tracking across teams, integrating performance metrics.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 7 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Central MI Dashboard</div>
+                        <div class="project-year">2023</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Built a Power BI dashboard consolidating business data across accounts.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 8 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Executive Dashboard</div>
+                        <div class="project-year">2024</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Created a business health monitoring tool using Power BI and SQL.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 9 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Fabric Governance and Monitoring Tool</div>
+                        <div class="project-year">2024</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Developed a Fabric tenant administration tool using PowerShell and Power BI.</p>
+                    </div>
+                </div>
+                
+                <!-- Project 10 -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Production Tracker</div>
+                        <div class="project-year">2025</div>
+                    </div>
+                    <div class="project-content">
+                        <p>Replaced Microsoft Purview with an in-house monitoring tool for Power BI reports.</p>
                     </div>
                 </div>
             </div>
@@ -1182,7 +1322,7 @@
                 const targetElement = document.querySelector(targetId);
                 
                 window.scrollTo({
-                    top: targetElement.offsetTop - 70,
+                    top: targetElement.offsetTop - 120,
                     behavior: 'smooth'
                 });
                 
@@ -1205,7 +1345,7 @@
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
                 
-                if (pageYOffset >= (sectionTop - 100)) {
+                if (pageYOffset >= (sectionTop - 150)) {
                     current = section.getAttribute('id');
                 }
             });
