@@ -8,34 +8,115 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #5e72eb;
-            --primary-dark: #4b5bd9;
-            --secondary: #8a94f0;
-            --dark: #0f111a;
-            --darker: #0a0c14;
-            --dark-card: #1a1d2b;
-            --light: #e0e7ff;
-            --text: #c7d2fe;
-            --text-light: #a5b4fc;
-            --accent: #8b5cf6;
-            --success: #10b981;
-            --warning: #f59e0b;
+            /* Light Theme Variables */
+            --light-primary: #2563eb;
+            --light-primary-dark: #1d4ed8;
+            --light-secondary: #4f46e5;
+            --light-dark: #1e293b;
+            --light-light: #f8fafc;
+            --light-gray: #64748b;
+            --light-light-gray: #e2e8f0;
+            --light-bg: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            --light-card-bg: #ffffff;
+            --light-text: #1e293b;
+            --light-text-light: #64748b;
+            --light-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --light-header-bg: linear-gradient(120deg, var(--light-primary), var(--light-secondary));
+            --light-border: 1px solid #e2e8f0;
+            
+            /* Dark Theme Variables */
+            --dark-primary: #5e72eb;
+            --dark-primary-dark: #4b5bd9;
+            --dark-secondary: #8a94f0;
+            --dark-dark: #0f111a;
+            --dark-darker: #0a0c14;
+            --dark-dark-card: #1a1d2b;
+            --dark-light: #e0e7ff;
+            --dark-text: #c7d2fe;
+            --dark-text-light: #a5b4fc;
+            --dark-accent: #8b5cf6;
+            --dark-success: #10b981;
+            --dark-warning: #f59e0b;
+            --dark-bg: linear-gradient(135deg, var(--dark-darker) 0%, var(--dark-dark) 100%);
+            --dark-card-bg: rgba(26, 29, 43, 0.7);
+            --dark-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --dark-header-bg: linear-gradient(120deg, var(--dark-dark-card), var(--dark-darker));
+            --dark-border: 1px solid rgba(94, 114, 235, 0.1);
+            
+            /* Current Theme Variables (Default: Dark) */
+            --primary: var(--dark-primary);
+            --primary-dark: var(--dark-primary-dark);
+            --secondary: var(--dark-secondary);
+            --dark: var(--dark-dark);
+            --darker: var(--dark-darker);
+            --dark-card: var(--dark-dark-card);
+            --light: var(--dark-light);
+            --text: var(--dark-text);
+            --text-light: var(--dark-text-light);
+            --accent: var(--dark-accent);
+            --success: var(--dark-success);
+            --warning: var(--dark-warning);
+            --bg: var(--dark-bg);
+            --card-bg: var(--dark-card-bg);
+            --shadow: var(--dark-shadow);
+            --header-bg: var(--dark-header-bg);
+            --border: var(--dark-border);
             --transition: all 0.4s ease;
+        }
+        
+        /* Light Theme Overrides */
+        body.light-theme {
+            --primary: var(--light-primary);
+            --primary-dark: var(--light-primary-dark);
+            --secondary: var(--light-secondary);
+            --dark: var(--light-dark);
+            --light: var(--light-light);
+            --text: var(--light-text);
+            --text-light: var(--light-text-light);
+            --bg: var(--light-bg);
+            --card-bg: var(--light-card-bg);
+            --shadow: var(--light-shadow);
+            --header-bg: var(--light-header-bg);
+            --border: var(--light-border);
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.5s ease, color 0.3s ease, border 0.3s ease;
         }
         
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            background: var(--bg);
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
             padding-top: 80px;
+        }
+        
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: var(--border);
+        }
+        
+        .theme-toggle i {
+            font-size: 1.3rem;
+            color: var(--text);
         }
         
         /* Navigation Menu */
@@ -44,12 +125,12 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: linear-gradient(to right, var(--dark-card), var(--darker));
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             padding: 15px 0;
-            border-bottom: 1px solid rgba(94, 114, 235, 0.2);
+            border-bottom: var(--border);
         }
         
         .nav-container {
@@ -67,7 +148,7 @@
             gap: 10px;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--light);
+            color: var(--text);
             text-decoration: none;
         }
         
@@ -85,7 +166,7 @@
         }
         
         .nav-links a {
-            color: var(--text-light);
+            color: var(--text);
             text-decoration: none;
             font-weight: 500;
             padding: 8px 15px;
@@ -95,7 +176,7 @@
         }
         
         .nav-links a:hover {
-            color: var(--light);
+            color: var(--primary);
         }
         
         .nav-links a::after {
@@ -117,15 +198,14 @@
         }
         
         .nav-links a.active {
-            color: var(--light);
-            background: rgba(94, 114, 235, 0.1);
+            color: var(--primary);
         }
         
         .mobile-menu-btn {
             display: none;
             background: transparent;
             border: none;
-            color: var(--light);
+            color: var(--text);
             font-size: 1.5rem;
             cursor: pointer;
         }
@@ -140,20 +220,6 @@
             padding: 4rem 0 2rem;
             position: relative;
             overflow: hidden;
-        }
-        
-        /* Animated Background Effect */
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(94, 114, 235, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 20%);
-            z-index: 1;
         }
         
         .header-content {
@@ -221,7 +287,7 @@
             background: rgba(94, 114, 235, 0.1);
             border-radius: 30px;
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(94, 114, 235, 0.2);
+            border: var(--border);
             transition: var(--transition);
         }
         
@@ -232,7 +298,7 @@
         }
         
         .contact-item a {
-            color: var(--light);
+            color: var(--text);
             text-decoration: none;
             transition: opacity 0.3s;
         }
@@ -248,24 +314,11 @@
             position: relative;
         }
         
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 90% 10%, rgba(94, 114, 235, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.05) 0%, transparent 20%);
-            z-index: -1;
-        }
-        
         .section-title {
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             font-size: 2.2rem;
-            color: var(--light);
+            color: var(--text);
             margin-bottom: 3rem;
             position: relative;
             text-align: center;
@@ -288,16 +341,16 @@
             font-size: 1.1rem;
             line-height: 1.8;
             text-align: center;
-            background: rgba(26, 29, 43, 0.7);
+            background: var(--card-bg);
             padding: 2.5rem;
             border-radius: 15px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(94, 114, 235, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: var(--border);
+            box-shadow: var(--shadow);
         }
         
         .highlight {
-            color: var(--secondary);
+            color: var(--primary);
             font-weight: 500;
         }
         
@@ -309,13 +362,13 @@
         }
         
         .skills-category {
-            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 2rem;
             transition: var(--transition);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(94, 114, 235, 0.1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: var(--border);
+            box-shadow: var(--shadow);
         }
         
         .skills-category:hover {
@@ -350,7 +403,7 @@
         
         .skills-list li:hover {
             transform: translateX(5px);
-            color: var(--light);
+            color: var(--text);
         }
         
         .skills-list li:last-child {
@@ -393,13 +446,13 @@
         }
         
         .timeline-content {
-            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 1.8rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
             position: relative;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(94, 114, 235, 0.1);
+            border: var(--border);
             transition: var(--transition);
         }
         
@@ -454,7 +507,7 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--light);
+            color: var(--text);
         }
         
         .timeline-subtitle {
@@ -500,13 +553,13 @@
         }
         
         .project-card {
-            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
             transition: var(--transition);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(94, 114, 235, 0.1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: var(--border);
+            box-shadow: var(--shadow);
         }
         
         .project-card:hover {
@@ -549,13 +602,13 @@
         }
         
         .cert-card {
-            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 1.8rem;
             transition: var(--transition);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(94, 114, 235, 0.1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: var(--border);
+            box-shadow: var(--shadow);
             border-left: 4px solid var(--primary);
         }
         
@@ -567,7 +620,7 @@
         
         .cert-title {
             font-weight: 600;
-            color: var(--light);
+            color: var(--text);
             margin-bottom: 0.8rem;
             display: flex;
             align-items: center;
@@ -588,22 +641,22 @@
             margin: 3rem auto;
             padding: 2rem;
             border-left: 4px solid var(--primary);
-            background: rgba(26, 29, 43, 0.5);
+            background: rgba(37, 99, 235, 0.05);
             border-radius: 15px;
             color: var(--text);
             font-size: 1.2rem;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(94, 114, 235, 0.1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: var(--border);
+            box-shadow: var(--shadow);
         }
         
         footer {
-            background: linear-gradient(to right, var(--dark-card), var(--darker));
-            color: var(--light);
+            background: var(--card-bg);
+            color: var(--text);
             padding: 4rem 0;
             text-align: center;
             margin-top: 3rem;
-            border-top: 1px solid rgba(94, 114, 235, 0.2);
+            border-top: var(--border);
         }
         
         .footer-content {
@@ -626,14 +679,15 @@
             height: 50px;
             background: rgba(94, 114, 235, 0.1);
             border-radius: 50%;
-            color: var(--light);
+            color: var(--text);
             font-size: 1.5rem;
             transition: var(--transition);
-            border: 1px solid rgba(94, 114, 235, 0.2);
+            border: var(--border);
         }
         
         .social-links a:hover {
             background: var(--primary);
+            color: white;
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(94, 114, 235, 0.3);
         }
@@ -692,11 +746,11 @@
                 top: 70px;
                 right: -100%;
                 flex-direction: column;
-                background: var(--dark-card);
+                background: var(--card-bg);
                 width: 100%;
                 text-align: center;
                 transition: 0.5s;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
                 padding: 20px 0;
             }
             
@@ -776,10 +830,22 @@
             .section-title {
                 font-size: 1.8rem;
             }
+            
+            .theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+            }
         }
     </style>
 </head>
-<body>
+<body class="dark-theme">
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
     <!-- Navigation Menu -->
     <nav class="navbar">
         <div class="nav-container">
@@ -807,7 +873,6 @@
         <div class="container">
             <div class="header-content">
                 <div class="profile-img">
-                    <!-- Placeholder for profile image -->
                     <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop" 
                          alt="Tanveer Alam Sheikh">
                 </div>
@@ -1153,6 +1218,34 @@
         
         // Set home as active initially
         document.querySelector('.nav-links a[href="#home"]').classList.add('active');
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Check for saved theme preference or prefer dark scheme
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'light' || (!currentTheme && !prefersDarkScheme.matches)) {
+            body.classList.add('light-theme');
+            themeIcon.className = 'fas fa-sun';
+        } else {
+            themeIcon.className = 'fas fa-moon';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-theme');
+            
+            if (body.classList.contains('light-theme')) {
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
     </script>
 </body>
 </html>
