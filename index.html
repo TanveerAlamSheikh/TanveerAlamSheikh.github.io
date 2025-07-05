@@ -8,13 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #4f46e5;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --light-gray: #e2e8f0;
+            --primary: #5e72eb;
+            --primary-dark: #4b5bd9;
+            --secondary: #8a94f0;
+            --dark: #0f111a;
+            --darker: #0a0c14;
+            --dark-card: #1a1d2b;
+            --light: #e0e7ff;
+            --text: #c7d2fe;
+            --text-light: #a5b4fc;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
         
         * {
@@ -25,9 +30,10 @@
         
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            color: var(--dark);
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
         }
         
         .container {
@@ -37,12 +43,27 @@
         }
         
         header {
-            background: linear-gradient(120deg, var(--primary), var(--secondary));
-            color: white;
+            background: linear-gradient(120deg, var(--dark-card), var(--darker));
+            color: var(--light);
             padding: 2rem 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(94, 114, 235, 0.2);
+        }
+        
+        /* Animated Background Effect */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(94, 114, 235, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 20%);
+            z-index: 1;
         }
         
         .header-content {
@@ -55,13 +76,14 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, 0.3);
+            border: 5px solid rgba(94, 114, 235, 0.3);
             margin: 0 auto 1.5rem;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            background: linear-gradient(45deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            box-shadow: 0 5px 15px rgba(94, 114, 235, 0.3);
         }
         
         .profile-img img {
@@ -75,6 +97,10 @@
             font-weight: 700;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(94, 114, 235, 0.2);
         }
         
         .tagline {
@@ -82,6 +108,7 @@
             font-weight: 400;
             opacity: 0.9;
             margin-bottom: 1.5rem;
+            color: var(--text-light);
         }
         
         .contact-info {
@@ -97,10 +124,22 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 1rem;
+            padding: 8px 15px;
+            background: rgba(94, 114, 235, 0.1);
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(94, 114, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            background: rgba(94, 114, 235, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(94, 114, 235, 0.2);
         }
         
         .contact-item a {
-            color: white;
+            color: var(--light);
             text-decoration: none;
             transition: opacity 0.3s;
         }
@@ -112,21 +151,28 @@
         
         .section {
             padding: 4rem 0;
-            background: white;
             margin: 2rem 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
         
-        .section:nth-child(even) {
-            background: linear-gradient(to bottom right, #ffffff, #f1f5f9);
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 90% 10%, rgba(94, 114, 235, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.05) 0%, transparent 20%);
+            z-index: -1;
         }
         
         .section-title {
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             font-size: 1.8rem;
-            color: var(--primary);
+            color: var(--light);
             margin-bottom: 2rem;
             position: relative;
             text-align: center;
@@ -137,9 +183,10 @@
             display: block;
             width: 80px;
             height: 4px;
-            background: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--accent));
             margin: 0.5rem auto;
             border-radius: 2px;
+            box-shadow: 0 0 15px rgba(94, 114, 235, 0.3);
         }
         
         .about-content {
@@ -148,10 +195,16 @@
             font-size: 1.1rem;
             line-height: 1.8;
             text-align: center;
+            background: rgba(26, 29, 43, 0.7);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(94, 114, 235, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
         .highlight {
-            color: var(--primary);
+            color: var(--secondary);
             font-weight: 500;
         }
         
@@ -163,26 +216,30 @@
         }
         
         .skills-category {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            border-radius: 15px;
+            padding: 1.8rem;
             transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(94, 114, 235, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
         
         .skills-category:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(94, 114, 235, 0.2);
+            border: 1px solid rgba(94, 114, 235, 0.3);
         }
         
         .skills-category h3 {
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             color: var(--secondary);
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.8rem;
+            font-size: 1.3rem;
         }
         
         .skills-list {
@@ -190,11 +247,17 @@
         }
         
         .skills-list li {
-            padding: 0.7rem 0;
-            border-bottom: 1px dashed var(--light-gray);
+            padding: 0.9rem 0;
+            border-bottom: 1px dashed rgba(94, 114, 235, 0.2);
             display: flex;
             align-items: center;
             gap: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .skills-list li:hover {
+            transform: translateX(5px);
+            color: var(--light);
         }
         
         .skills-list li:last-child {
@@ -213,9 +276,10 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            background: var(--primary);
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
             left: 50%;
             transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(94, 114, 235, 0.3);
         }
         
         .timeline-item {
@@ -236,22 +300,32 @@
         }
         
         .timeline-content {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            border-radius: 15px;
+            padding: 1.8rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(94, 114, 235, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(94, 114, 235, 0.2);
+            border: 1px solid rgba(94, 114, 235, 0.3);
         }
         
         .timeline-content::before {
             content: '';
             position: absolute;
-            top: 20px;
+            top: 25px;
             width: 20px;
             height: 20px;
             background: var(--primary);
             border-radius: 50%;
             z-index: 1;
+            box-shadow: 0 0 15px var(--primary);
         }
         
         /* Timeline dot positioning fix */
@@ -267,10 +341,10 @@
         .timeline-content::after {
             content: '';
             position: absolute;
-            top: 25px;
+            top: 30px;
             width: 10px;
             height: 10px;
-            background: white;
+            background: var(--light);
             border-radius: 50%;
             z-index: 2;
         }
@@ -287,7 +361,7 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: var(--primary-dark);
+            color: var(--light);
         }
         
         .timeline-subtitle {
@@ -298,18 +372,31 @@
         
         .timeline-date {
             font-size: 0.9rem;
-            color: var(--gray);
+            color: var(--text-light);
             margin-bottom: 1rem;
+            background: rgba(94, 114, 235, 0.1);
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
         }
         
         .timeline-list {
-            list-style-type: disc;
-            padding-left: 1.2rem;
-            margin-top: 0.8rem;
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 1rem;
         }
         
         .timeline-list li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .timeline-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
         }
         
         .projects-grid {
@@ -320,27 +407,29 @@
         }
         
         .project-card {
-            background: white;
-            border-radius: 10px;
+            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s;
-            border: 1px solid var(--light-gray);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(94, 114, 235, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
         
         .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(94, 114, 235, 0.2);
+            border: 1px solid rgba(94, 114, 235, 0.3);
         }
         
         .project-header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.2rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: var(--light);
+            padding: 1.4rem;
         }
         
         .project-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 0.3rem;
         }
@@ -351,46 +440,51 @@
         }
         
         .project-content {
-            padding: 1.5rem;
+            padding: 1.8rem;
         }
         
         .project-content p {
-            color: var(--gray);
+            color: var(--text-light);
             margin-bottom: 1rem;
         }
         
         .cert-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            gap: 1.8rem;
             margin-top: 2rem;
         }
         
         .cert-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--primary);
+            background: linear-gradient(145deg, rgba(26, 29, 43, 0.8), rgba(15, 17, 26, 0.8));
+            border-radius: 15px;
+            padding: 1.8rem;
             transition: transform 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(94, 114, 235, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--primary);
         }
         
         .cert-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(94, 114, 235, 0.2);
+            border: 1px solid rgba(94, 114, 235, 0.3);
         }
         
         .cert-title {
             font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 0.5rem;
+            color: var(--light);
+            margin-bottom: 0.8rem;
             display: flex;
             align-items: center;
             gap: 0.8rem;
+            font-size: 1.1rem;
         }
         
         .cert-details {
             font-size: 0.9rem;
-            color: var(--gray);
+            color: var(--text-light);
             margin-top: 0.5rem;
         }
         
@@ -398,19 +492,25 @@
             font-style: italic;
             text-align: center;
             max-width: 700px;
-            margin: 2rem auto;
-            padding: 1.5rem;
+            margin: 3rem auto;
+            padding: 2rem;
             border-left: 4px solid var(--primary);
-            background: rgba(37, 99, 235, 0.05);
-            border-radius: 0 8px 8px 0;
-            color: var(--dark);
+            background: rgba(26, 29, 43, 0.5);
+            border-radius: 15px;
+            color: var(--text);
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(94, 114, 235, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
         
         footer {
-            background: var(--dark);
-            color: white;
+            background: linear-gradient(to right, var(--dark-card), var(--darker));
+            color: var(--light);
             padding: 3rem 0;
             text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(94, 114, 235, 0.2);
         }
         
         .footer-content {
@@ -431,22 +531,61 @@
             justify-content: center;
             width: 50px;
             height: 50px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(94, 114, 235, 0.1);
             border-radius: 50%;
-            color: white;
+            color: var(--light);
             font-size: 1.5rem;
-            transition: background 0.3s, transform 0.3s;
+            transition: all 0.3s;
+            border: 1px solid rgba(94, 114, 235, 0.2);
         }
         
         .social-links a:hover {
             background: var(--primary);
             transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(94, 114, 235, 0.3);
         }
         
         .copyright {
             margin-top: 1.5rem;
             font-size: 0.9rem;
             opacity: 0.7;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+        
+        /* Animation for elements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section, .header-content {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Hover glow effect */
+        .glow-on-hover {
+            transition: text-shadow 0.3s;
+        }
+        
+        .glow-on-hover:hover {
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
         }
         
         @media (max-width: 768px) {
@@ -520,7 +659,7 @@
                          alt="Tanveer Alam Sheikh"
                          onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';">
                 </div>
-                <h1>Tanveer Alam Sheikh</h1>
+                <h1 class="glow-on-hover">Tanveer Alam Sheikh</h1>
                 <div class="tagline">Certified Power BI Developer | Data Analyst | Business Insights Expert</div>
                 
                 <div class="contact-info">
@@ -567,39 +706,39 @@
                 <div class="skills-category">
                     <h3><i class="fas fa-database"></i> Data Tools & Languages</h3>
                     <ul class="skills-list">
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Power BI (Desktop & Service)</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Microsoft Fabric</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> SQL Queries</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> M Language (Power Query)</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Excel (Advanced), VBA, MS Access</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Python (Basics)</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> PowerShell</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Power BI (Desktop & Service)</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Microsoft Fabric</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> SQL Queries</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> M Language (Power Query)</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Excel (Advanced), VBA, MS Access</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Python (Basics)</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> PowerShell</li>
                     </ul>
                 </div>
                 
                 <div class="skills-category">
                     <h3><i class="fas fa-chart-line"></i> Core Competencies</h3>
                     <ul class="skills-list">
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Data Analysis & Visualization</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Data Modeling & Transformation</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Business Intelligence Reporting</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> ETL/ELT Processes</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Data Governance & Compliance</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Process Automation</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Data Storytelling</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Analysis & Visualization</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Modeling & Transformation</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Business Intelligence Reporting</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> ETL/ELT Processes</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Governance & Compliance</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Process Automation</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Storytelling</li>
                     </ul>
                 </div>
                 
                 <div class="skills-category">
                     <h3><i class="fas fa-user-cog"></i> Professional Skills</h3>
                     <ul class="skills-list">
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Project Management</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Critical Thinking</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Problem Solving</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Cross-functional Collaboration</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Client Communication</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Requirements Analysis</li>
-                        <li><i class="fas fa-check-circle" style="color: #10b981;"></i> Process Optimization</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Project Management</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Critical Thinking</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Problem Solving</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Cross-functional Collaboration</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Client Communication</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Requirements Analysis</li>
+                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Process Optimization</li>
                     </ul>
                 </div>
             </div>
@@ -742,25 +881,25 @@
             <h2 class="section-title">Certifications & Achievements</h2>
             <div class="cert-container">
                 <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-certificate" style="color: #3b82f6;"></i> Microsoft Certified: Fabric Analytics Engineer Associate</div>
+                    <div class="cert-title"><i class="fas fa-certificate" style="color: var(--primary);"></i> Microsoft Certified: Fabric Analytics Engineer Associate</div>
                     <div class="cert-details"><strong>Credential ID:</strong> DP-600</div>
                     <div class="cert-details"><strong>Issued:</strong> Dec 2024 | <strong>Expires:</strong> Dec 2025</div>
                 </div>
                 
                 <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-certificate" style="color: #3b82f6;"></i> Microsoft Certified: Power BI Data Analyst Associate</div>
+                    <div class="cert-title"><i class="fas fa-certificate" style="color: var(--primary);"></i> Microsoft Certified: Power BI Data Analyst Associate</div>
                     <div class="cert-details"><strong>Credential ID:</strong> PL-300</div>
                     <div class="cert-details"><strong>Issued:</strong> Sep 2024 | <strong>Expires:</strong> Sep 2025</div>
                 </div>
                 
                 <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-trophy" style="color: #f59e0b;"></i> Lean Green Belt</div>
+                    <div class="cert-title"><i class="fas fa-trophy" style="color: var(--warning);"></i> Lean Green Belt</div>
                     <div class="cert-details">Process Improvement Certification</div>
                     <div class="cert-details">Achieved through Project 2 implementation</div>
                 </div>
                 
                 <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-medal" style="color: #10b981;"></i> Contextual Master</div>
+                    <div class="cert-title"><i class="fas fa-medal" style="color: var(--success);"></i> Contextual Master</div>
                     <div class="cert-details">Business Intelligence Expertise</div>
                     <div class="cert-details">Awarded for excellence in Project 3</div>
                 </div>
