@@ -61,8 +61,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
-            color: white;
+            overflow: hidden;
+        }
+        
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         h1 {
@@ -246,14 +251,36 @@
             height: 20px;
             background: var(--primary);
             border-radius: 50%;
+            z-index: 1;
         }
         
+        /* Timeline dot positioning fix */
         .timeline-item:nth-child(odd) .timeline-content::before {
             right: -52px;
         }
         
         .timeline-item:nth-child(even) .timeline-content::before {
             left: -52px;
+        }
+        
+        /* Improved timeline line alignment */
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            right: -49px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content::after {
+            left: -49px;
         }
         
         .timeline-title {
@@ -449,6 +476,19 @@
                 right: auto;
             }
             
+            .timeline-item:nth-child(odd) .timeline-content::after {
+                left: -49px;
+                right: auto;
+            }
+            
+            .timeline-item:nth-child(even) .timeline-content::before {
+                left: -52px;
+            }
+            
+            .timeline-item:nth-child(even) .timeline-content::after {
+                left: -49px;
+            }
+            
             .header-content {
                 padding: 0 20px;
             }
@@ -475,7 +515,10 @@
         <div class="container">
             <div class="header-content">
                 <div class="profile-img">
-                    <i class="fas fa-user"></i>
+                    <!-- LinkedIn Profile Photo Integration -->
+                    <img src="https://media.licdn.com/dms/image/D5603AQFz5dHr8fLf9w/profile-displayphoto-shrink_400_400/0/1713433251340?e=1721865600&v=beta&t=uHrN4Y4d4LqjBv6vJ0mZ4yUwN9N4B8w4e8Q4Wq4Y4Y" 
+                         alt="Tanveer Alam Sheikh"
+                         onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';">
                 </div>
                 <h1>Tanveer Alam Sheikh</h1>
                 <div class="tagline">Certified Power BI Developer | Data Analyst | Business Insights Expert</div>
