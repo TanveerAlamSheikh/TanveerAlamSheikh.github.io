@@ -23,11 +23,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle sidebar toggle
   toggleBtn.addEventListener("click", () => {
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-      sidebar.classList.toggle("expanded");
+    const isSidebarExpanded = sidebar.classList.toggle("expanded");
+
+    // Prevent body scroll on mobile
+    if (isSidebarExpanded) {
+      document.body.classList.add("sidebar-open");
     } else {
-      sidebar.classList.toggle("collapsed");
+      document.body.classList.remove("sidebar-open");
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      window.innerWidth <= 1024 &&
+      sidebar.classList.contains("expanded") &&
+      !sidebar.contains(e.target) &&
+      !toggleBtn.contains(e.target)
+    ) {
+      sidebar.classList.remove("expanded");
+      document.body.classList.remove("sidebar-open");
     }
   });
 });
