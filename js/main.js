@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggleSidebar");
   const themeSelect = document.getElementById("themeSelect");
 
-  // Load theme
+  // Load saved theme from localStorage
   const savedTheme = localStorage.getItem("selectedTheme");
   if (savedTheme) {
     body.className = `theme-${savedTheme}`;
@@ -14,33 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
       .join(" ");
   }
 
-  // Change theme
+  // Handle theme selection
   themeSelect.addEventListener("change", () => {
     const selected = themeSelect.value.toLowerCase().replace(/\s/g, "-");
     body.className = `theme-${selected}`;
     localStorage.setItem("selectedTheme", selected);
   });
 
-  // Toggle sidebar
+  // Handle sidebar toggle
   toggleBtn.addEventListener("click", () => {
-    const isSidebarExpanded = sidebar.classList.toggle("expanded");
-    if (isSidebarExpanded) {
-      document.body.classList.add("sidebar-open");
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      sidebar.classList.toggle("expanded");
     } else {
-      document.body.classList.remove("sidebar-open");
-    }
-  });
-
-  // Optional: close sidebar on outside click
-  document.addEventListener("click", (e) => {
-    if (
-      window.innerWidth <= 1024 &&
-      sidebar.classList.contains("expanded") &&
-      !sidebar.contains(e.target) &&
-      !toggleBtn.contains(e.target)
-    ) {
-      sidebar.classList.remove("expanded");
-      document.body.classList.remove("sidebar-open");
+      sidebar.classList.toggle("collapsed");
     }
   });
 });
