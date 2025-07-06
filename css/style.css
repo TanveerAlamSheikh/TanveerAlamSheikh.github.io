@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f8fafc;
+}
+
+.hub-header {
+  position: relative;
+}
+
+.banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.avatar-container {
+  position: absolute;
+  bottom: -40px;
+  left: 30px;
+}
+
+.avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid white;
+}
+
+.theme-switcher {
+  position: absolute;
+  bottom: 10px;
+  right: 30px;
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.portfolio-section,
+.tech-section {
+  padding: 3rem 2rem;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.card,
+.tech-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover,
+.tech-card:hover {
+  transform: translateY(-5px);
+}
+
+.coming-soon {
+  opacity: 0.5;
+}
+
+.tech-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 0.8rem;
+}

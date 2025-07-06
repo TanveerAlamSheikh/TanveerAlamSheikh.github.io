@@ -3,75 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Portfolio Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f0f4f8;
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
-      color: #1e3a8a;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      width: 100%;
-      max-width: 1000px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      text-align: center;
-      transition: transform 0.3s ease;
-      text-decoration: none;
-      color: #111827;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-
-    .card h2 {
-      margin: 0.5rem 0;
-      font-size: 1.5rem;
-      color: #2563eb;
-    }
-
-    .coming-soon {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  </style>
+  <title>Tanveer's Portfolio Hub</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>Tanveer's Portfolio Hub</h1>
-  <div class="grid">
-    <a href="view1/index.html" class="card">
-      <h2>View 1</h2>
-      <p>My Power BI Developer Portfolio</p>
-    </a>
-    
-    <div class="card coming-soon">
-      <h2>View 2</h2>
-      <p>Coming Soon...</p>
+  <header class="hub-header">
+    <img src="assets/Hubbanner.jpeg" alt="Banner" class="banner-img" />
+    <div class="avatar-container">
+      <img src="assets/github_avatar.png" alt="Avatar" class="avatar-img" />
     </div>
-    
-    <!-- More views can be added here -->
-  </div>
+    <div class="theme-switcher">
+      <label for="themeSelect">🎨 Theme:</label>
+      <select id="themeSelect">
+        <option>Default</option>
+        <option>Dark</option>
+        <option>Light</option>
+        <option>Ocean</option>
+        <option>Forest</option>
+        <option>Lavender</option>
+        <option>Sunset</option>
+        <option>Matrix</option>
+        <option>Sky Blue</option>
+        <option>Sand</option>
+        <option>Contrast</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <section class="portfolio-section">
+      <h2>Portfolio Views</h2>
+      <div class="card-grid">
+        <a href="portfolio/view1/index.html" class="card">
+          <h3>Portfolio 1</h3>
+          <p>My Power BI Developer Portfolio</p>
+        </a>
+        <div class="card coming-soon">
+          <h3>Portfolio 2</h3>
+          <p>Coming Soon...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tech-section">
+      <h2>Technology Projects</h2>
+      <div class="card-grid">
+        <div class="tech-card"><img src="assets/powerbi.png"><span>Power BI</span></div>
+        <div class="tech-card"><img src="assets/excel.png"><span>Excel</span></div>
+        <div class="tech-card"><img src="assets/vba.png"><span>VBA</span></div>
+        <div class="tech-card"><img src="assets/powershell.png"><span>PowerShell</span></div>
+        <div class="tech-card"><img src="assets/access.png"><span>Access</span></div>
+        <div class="tech-card"><img src="assets/sql.png"><span>SQL</span></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
