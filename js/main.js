@@ -24,6 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle sidebar toggle
   toggleBtn.addEventListener("click", () => {
     sidebar.classList.toggle("collapsed");
-    toggleBtn.classList.toggle("expanded");
+    sidebar.classList.toggle("expanded");
   });
 });
