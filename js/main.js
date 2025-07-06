@@ -23,13 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle sidebar toggle
   toggleBtn.addEventListener("click", () => {
-    const isSidebarExpanded = sidebar.classList.toggle("expanded");
-
-    // Prevent body scroll on mobile
-    if (isSidebarExpanded) {
-      document.body.classList.add("sidebar-open");
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      sidebar.classList.toggle("expanded");
     } else {
-      document.body.classList.remove("sidebar-open");
+      sidebar.classList.toggle("collapsed");
     }
   });
 });
