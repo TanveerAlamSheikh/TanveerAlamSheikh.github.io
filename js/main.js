@@ -33,15 +33,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-document.addEventListener("click", (e) => {
-  if (
-    window.innerWidth <= 1024 &&
-    sidebar.classList.contains("expanded") &&
-    !sidebar.contains(e.target) &&
-    !toggleBtn.contains(e.target)
-  ) {
-    sidebar.classList.remove("expanded");
-    document.body.classList.remove("sidebar-open");
-  }
-});
