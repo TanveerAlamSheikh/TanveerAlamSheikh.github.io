@@ -23,7 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle sidebar toggle
   toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
-    sidebar.classList.toggle("expanded");
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      sidebar.classList.toggle("expanded");
+    } else {
+      sidebar.classList.toggle("collapsed");
+    }
   });
 });
