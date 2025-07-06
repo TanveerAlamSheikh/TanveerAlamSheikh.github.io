@@ -6,66 +6,76 @@
   <title>Tanveer's Portfolio Hub</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-  <div class="container">
-    <aside class="sidebar">
-      <div class="banner-img">
-        <img src="assets/Hubbanner.png" alt="Banner" />
-        <div class="avatar-container">
+<body class="theme-default">
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-content">
+        <!-- Banner -->
+        <div class="banner-img">
+          <img src="assets/Hubbanner.png" alt="Banner" />
           <div class="avatar-frame">
             <img src="assets/github_avatar.png" class="avatar-img" alt="Avatar" />
           </div>
         </div>
-      </div>
 
+        <!-- Theme Selector -->
+        <div class="theme-switcher">
+          <label for="themeSelect">🎨 Theme:</label>
+          <select id="themeSelect">
+            <option>Default</option>
+            <option>Dark</option>
+            <option>Light</option>
+            <option>Ocean</option>
+            <option>Forest</option>
+            <option>Lavender</option>
+            <option>Sunset</option>
+            <option>Matrix</option>
+            <option>Sky Blue</option>
+            <option>Sand</option>
+            <option>Contrast</option>
+          </select>
+        </div>
 
-      <div class="theme-switcher">
-        <label for="themeSelect">🎨 Theme:</label>
-        <select id="themeSelect">
-          <option>Default</option>
-          <option>Dark</option>
-          <option>Light</option>
-          <option>Ocean</option>
-          <option>Forest</option>
-          <option>Lavender</option>
-          <option>Sunset</option>
-          <option>Matrix</option>
-          <option>Sky Blue</option>
-          <option>Sand</option>
-          <option>Contrast</option>
-        </select>
-      </div>
-
-      <div class="tree-menu">
-        <ul>
-          <li><strong>📁 Portfolio Views</strong>
-            <ul>
-              <li><a href="portfolio/view1/index.html">Portfolio 1</a></li>
-              <li><span>Portfolio 2 (Coming Soon)</span></li>
-            </ul>
-          </li>
-          <li><strong>📁 Technologies</strong>
-            <ul>
-              <li>Power BI</li>
-              <li>Excel</li>
-              <li>VBA</li>
-              <li>PowerShell</li>
-              <li>Access</li>
-              <li>SQL</li>
-            </ul>
-          </li>
-        </ul>
+        <!-- Tree Menu -->
+        <div class="tree-menu">
+          <ul>
+            <li><strong>📁 Portfolio Views</strong>
+              <ul>
+                <li><a href="portfolio/view1/index.html">Portfolio 1</a></li>
+                <li>Portfolio 2 (Coming Soon)</li>
+              </ul>
+            </li>
+            <div style="height: 2rem;"></div>
+            <li><strong>📁 Technologies</strong>
+              <ul>
+                <li>Power BI</li>
+                <li>Excel</li>
+                <li>VBA</li>
+                <li>PowerShell</li>
+                <li>Access</li>
+                <li>SQL</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </aside>
 
+    <!-- Main Content -->
     <main class="main-content">
+      <!-- Sidebar Toggle Button -->
+      <button id="toggleSidebar" title="Toggle Sidebar">☰</button>
+
+      <!-- Portfolio Section -->
       <section class="portfolio-section">
-        <h2>Portfolio Snapshots</h2>
+        <h2>Portfolio Views</h2>
+        <div class="section-divider"></div>
+
         <div class="card-grid">
-          
           <a href="portfolio/view1/index.html" class="portfolio-card">
             <div class="portfolio-img">
-              <img src="portfolio/view1/src/snap.jpg" alt="Portfolio 1 Snapshot" />
+              <img src="portfolio/view1/src/snap.jpeg" alt="Portfolio 1 Snapshot" />
             </div>
             <div class="portfolio-info">
               <h3>Portfolio 1</h3>
@@ -82,22 +92,28 @@
               <p>Coming Soon...</p>
             </div>
           </div>
+        </div>
       </section>
+  
+      <div style="height: 3rem;"></div>
 
+      <!-- Technology Section -->
       <section class="tech-section">
         <h2>Technology Projects</h2>
+        <div class="section-divider"></div>
         <div class="card-grid">
-          <div class="tech-card"><img src="assets/powerbi.png"><span>Power BI</span></div>
-          <div class="tech-card"><img src="assets/excel.png"><span>Excel</span></div>
-          <div class="tech-card"><img src="assets/vba.png"><span>VBA</span></div>
-          <div class="tech-card"><img src="assets/powershell.png"><span>PowerShell</span></div>
-          <div class="tech-card"><img src="assets/access.png"><span>Access</span></div>
-          <div class="tech-card"><img src="assets/sql.png"><span>SQL</span></div>
+          <div class="tech-card"><img src="assets/powerbi.png" alt="Power BI"><span>Power BI</span></div>
+          <div class="tech-card"><img src="assets/excel.png" alt="Excel"><span>Excel</span></div>
+          <div class="tech-card"><img src="assets/vba.png" alt="VBA"><span>VBA</span></div>
+          <div class="tech-card"><img src="assets/powershell.png" alt="PowerShell"><span>PowerShell</span></div>
+          <div class="tech-card"><img src="assets/access.png" alt="Access"><span>Access</span></div>
+          <div class="tech-card"><img src="assets/sql.png" alt="SQL"><span>SQL</span></div>
         </div>
       </section>
     </main>
   </div>
 
+  <!-- JS -->
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -1,13 +1,29 @@
-const themeSelect = document.getElementById("themeSelect");
-const savedTheme = localStorage.getItem("selectedTheme");
+document.addEventListener("DOMContentLoaded", () => {
+  const body = document.body;
+  const sidebar = document.getElementById("sidebar");
+  const toggleBtn = document.getElementById("toggleSidebar");
+  const themeSelect = document.getElementById("themeSelect");
 
-if (savedTheme) {
-  document.body.className = `theme-${savedTheme}`;
-  themeSelect.value = savedTheme.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-}
+  // Load saved theme from localStorage
+  const savedTheme = localStorage.getItem("selectedTheme");
+  if (savedTheme) {
+    body.className = `theme-${savedTheme}`;
+    themeSelect.value = savedTheme
+      .split("-")
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
 
-themeSelect.addEventListener("change", () => {
-  const theme = themeSelect.value.toLowerCase().replace(/\s/g, "-");
-  document.body.className = `theme-${theme}`;
-  localStorage.setItem("selectedTheme", theme);
+  // Handle theme selection
+  themeSelect.addEventListener("change", () => {
+    const selected = themeSelect.value.toLowerCase().replace(/\s/g, "-");
+    body.className = `theme-${selected}`;
+    localStorage.setItem("selectedTheme", selected);
+  });
+
+  // Handle sidebar toggle
+  toggleBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+    toggleBtn.classList.toggle("expanded");
+  });
 });
