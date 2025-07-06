@@ -1,417 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tanveer Alam Sheikh - Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Portfolio Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: #1e3a8a;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+      text-decoration: none;
+      color: #111827;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      margin: 0.5rem 0;
+      font-size: 1.5rem;
+      color: #2563eb;
+    }
+
+    .coming-soon {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
-<body class="dark-theme">
-    <!-- Theme Toggle Button - Positioned below navbar -->
-    <div class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
-    </div>
-
-    <!-- Navigation Menu -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#home" class="logo">
-                <i class="fas fa-chart-line"></i>
-                <span>Tanveer</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#home" class="active">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#certifications">Certifications</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <button class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Header Section -->
-    <header id="home">
-        <div class="container">
-            <div class="header-content">
-                <div class="profile-img">
-                    <!-- Local Profile Photo from src folder -->
-                    <img src="src/git_portfolio.profileimage.jpeg" 
-                         alt="Tanveer Alam Sheikh"
-                         onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';">
-                </div>
-                <h1 class="glow-on-hover">Tanveer Alam Sheikh</h1>
-                <div class="tagline">Certified Power BI Developer | Data Analyst | Business Insights Expert</div>
-                
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Thane, India</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <span>+91 7678035451</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <a href="mailto:tanveeralamsheikh92@gmail.com">tanveeralamsheikh92@gmail.com</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fab fa-linkedin"></i>
-                        <a href="https://www.linkedin.com/in/tanveeralamsheikh/" target="_blank">LinkedIn Profile</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- About Section -->
-    <section class="section" id="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <p>I'm a results-driven <span class="highlight">Power BI Developer</span> with a passion for turning data into actionable insights. I bring a strong foundation in Power BI Development, Data Analytics & Visualization, and ETL/ELT processes in Microsoft Fabric.</p>
-                
-                <p>With over <span class="highlight">7 years of experience</span> in Business Analysis and Data Analytics, I've gained a deep understanding of business operations, especially in the Insurance domain. As a Data Analyst, I focus on end-to-end BI solutions—from raw data to impactful dashboards.</p>
-                
-                <p>I've built domain-wide tools and reports for business heads, and my work has helped enhance operational efficiency across functions. My expertise includes designing automated reporting tools, improving ETL processes, and ensuring data governance compliance.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Education Section -->
-    <section class="section" id="education">
-        <div class="container">
-            <h2 class="section-title">Education</h2>
-            <div class="education-container">
-                <div class="education-item">
-                    <div class="education-details">
-                        <div class="education-qualification">Bachelor in Management Studies</div>
-                        <div class="education-board">Mumbai University</div>
-                    </div>
-                    <div class="education-year">2014</div>
-                </div>
-                
-                <div class="education-item">
-                    <div class="education-details">
-                        <div class="education-qualification">XII</div>
-                        <div class="education-board">Maharashtra Board</div>
-                    </div>
-                    <div class="education-year">2011</div>
-                </div>
-                
-                <div class="education-item">
-                    <div class="education-details">
-                        <div class="education-qualification">X</div>
-                        <div class="education-board">CBSE</div>
-                    </div>
-                    <div class="education-year">2008</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="section" id="skills">
-        <div class="container">
-            <h2 class="section-title">Skills & Technologies</h2>
-            <div class="skills-container">
-                <div class="skills-category">
-                    <h3><i class="fas fa-database"></i> Data Tools & Languages</h3>
-                    <ul class="skills-list">
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Power BI (Desktop & Service)</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Microsoft Fabric</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> SQL Queries</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> M Language (Power Query)</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Excel (Advanced), VBA, MS Access</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Python (Basics)</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> PowerShell</li>
-                    </ul>
-                </div>
-                
-                <div class="skills-category">
-                    <h3><i class="fas fa-chart-line"></i> Core Competencies</h3>
-                    <ul class="skills-list">
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Analysis & Visualization</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Modeling & Transformation</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Business Intelligence Reporting</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> ETL/ELT Processes</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Governance & Compliance</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Process Automation</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Data Storytelling</li>
-                    </ul>
-                </div>
-                
-                <div class="skills-category">
-                    <h3><i class="fas fa-user-cog"></i> Professional Skills</h3>
-                    <ul class="skills-list">
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Project Management</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Critical Thinking</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Problem Solving</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Cross-functional Collaboration</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Client Communication</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Requirements Analysis</li>
-                        <li><i class="fas fa-check-circle" style="color: var(--success);"></i> Process Optimization</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section class="section" id="experience">
-        <div class="container">
-            <h2 class="section-title">Professional Experience</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-title">Tata Consultancy Services</div>
-                        <div class="timeline-subtitle">Assistant Manager</div>
-                        <div class="timeline-date">Aug 2024 – Present (0 years 10 months)</div>
-                        <ul class="timeline-list">
-                            <li>Collaborated with cross-functional teams to deliver 20+ tailored reports</li>
-                            <li>Enhanced ETL processes and data governance tools, reducing processing time by 25%</li>
-                            <li>Introduced Medallion architecture to standardize development workflows</li>
-                            <li>Engineered scalable data warehouses and pipelines using Microsoft Fabric</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-title">Tata Consultancy Services</div>
-                        <div class="timeline-subtitle">Business Process Lead</div>
-                        <div class="timeline-date">Aug 2018 – Jul 2024 (5 years 11 months)</div>
-                        <ul class="timeline-list">
-                            <li>Provided data-driven insights to leadership for business optimization</li>
-                            <li>Automated 12+ reporting workflows, cutting manual effort by 40%</li>
-                            <li>Ensured data governance and compliance across reports and dashboards</li>
-                            <li>Replaced error-prone Excel reporting with automation, eliminating 90% of manual errors</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-title">Capita India Private Limited</div>
-                        <div class="timeline-subtitle">Analyst - Business Planning & MI</div>
-                        <div class="timeline-date">Jan 2018 – Jul 2018 (0 years 6 months)</div>
-                        <ul class="timeline-list">
-                            <li>Worked in the MI5 team on report creation and data analysis</li>
-                            <li>Applied Advanced Excel and VBA to automate reporting processes</li>
-                            <li>Developed understanding of MI functions and business impact</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-title">Capita India Private Limited</div>
-                        <div class="timeline-subtitle">Executive Insurance</div>
-                        <div class="timeline-date">Apr 2015 – Dec 2017 (2 years 8 months)</div>
-                        <ul class="timeline-list">
-                            <li>Handled customer requests in backend operations</li>
-                            <li>Processed insurance-related documentation</li>
-                            <li>Gained in-depth understanding of insurance domain</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section with all 10 projects -->
-    <section class="section" id="projects">
-        <div class="container">
-            <h2 class="section-title">Key Projects</h2>
-            <div class="projects-grid">
-                <!-- Project 1 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Report Automation</div>
-                        <div class="project-year">2017</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Automated BAU reports using Excel VBA, reducing manual efforts by 50%.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 2 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Quality Tool</div>
-                        <div class="project-year">2019</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Developed an auditing workflow system, saving 1.5 FTE effort and reducing biased auditing.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 3 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Learning Module Tool</div>
-                        <div class="project-year">2021</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Created a training tracker for compliance, ensuring timely course completion.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 4 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Headcount Tool</div>
-                        <div class="project-year">2021</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Designed an employee inventory tracker for transparency in resource management.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 5 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">WFO Tool</div>
-                        <div class="project-year">2022</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Developed a workforce rostering tool to monitor office attendance.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 6 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">KPI Tool</div>
-                        <div class="project-year">2022</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Automated KPI tracking across teams, integrating performance metrics.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 7 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Central MI Dashboard</div>
-                        <div class="project-year">2023</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Built a Power BI dashboard consolidating business data across accounts.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 8 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Executive Dashboard</div>
-                        <div class="project-year">2024</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Created a business health monitoring tool using Power BI and SQL.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 9 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Fabric Governance and Monitoring Tool</div>
-                        <div class="project-year">2024</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Developed a Fabric tenant administration tool using PowerShell and Power BI.</p>
-                    </div>
-                </div>
-                
-                <!-- Project 10 -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Production Tracker</div>
-                        <div class="project-year">2025</div>
-                    </div>
-                    <div class="project-content">
-                        <p>Replaced Microsoft Purview with an in-house monitoring tool for Power BI reports.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Certifications Section -->
-    <section class="section" id="certifications">
-        <div class="container">
-            <h2 class="section-title">Certifications & Achievements</h2>
-            <div class="cert-container">
-                <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-certificate" style="color: var(--primary);"></i> Microsoft Certified: Fabric Analytics Engineer Associate</div>
-                    <div class="cert-details"><strong>Credential ID:</strong> DP-600</div>
-                    <div class="cert-details"><strong>Issued:</strong> Dec 2024 | <strong>Expires:</strong> Dec 2025</div>
-                </div>
-                
-                <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-certificate" style="color: var(--primary);"></i> Microsoft Certified: Power BI Data Analyst Associate</div>
-                    <div class="cert-details"><strong>Credential ID:</strong> PL-300</div>
-                    <div class="cert-details"><strong>Issued:</strong> Sep 2024 | <strong>Expires:</strong> Sep 2025</div>
-                </div>
-                
-                <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-trophy" style="color: var(--warning);"></i> Lean Green Belt</div>
-                    <div class="cert-details">Process Improvement Certification</div>
-                    <div class="cert-details">Achieved through Project 2 implementation</div>
-                </div>
-                
-                <div class="cert-card">
-                    <div class="cert-title"><i class="fas fa-medal" style="color: var(--success);"></i> Contextual Master</div>
-                    <div class="cert-details">Business Intelligence Expertise</div>
-                    <div class="cert-details">Awarded for excellence in Project 3</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quote Section -->
-    <div class="container">
-        <div class="quote">
-            <i class="fas fa-quote-left" style="font-size: 2rem; opacity: 0.3; margin-right: 10px;"></i>
-            "Data is the new oil—but only when refined."
-            <i class="fas fa-quote-right" style="font-size: 2rem; opacity: 0.3; margin-left: 10px;"></i>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <h3>Let's Connect</h3>
-                <p>Feel free to reach out for collaborations or just a friendly hello</p>
-                
-                <div class="social-links">
-                    <a href="mailto:tanveeralamsheikh92@gmail.com" title="Email">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/tanveeralamsheikh/" target="_blank" title="LinkedIn">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://github.com/tanveeralamsheikh" target="_blank" title="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                </div>
-                
-                <div class="copyright">
-                    &copy; 2025 Tanveer Alam Sheikh. All rights reserved.
-                </div>
-            </div>
-        </div>
-    </footer>
+<body>
+  <h1>Tanveer's Portfolio Hub</h1>
+  <div class="grid">
+    <a href="view1/index.html" class="card">
+      <h2>View 1</h2>
+      <p>My Power BI Developer Portfolio</p>
+    </a>
     
-    <script src="js/main.js"></script>
+    <div class="card coming-soon">
+      <h2>View 2</h2>
+      <p>Coming Soon...</p>
+    </div>
+    
+    <!-- More views can be added here -->
+  </div>
 </body>
 </html>
