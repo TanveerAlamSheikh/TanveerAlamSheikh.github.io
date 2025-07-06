@@ -9,10 +9,11 @@ body {
 }
 
 .banner-img {
-  width: 100%;
-  height: 15vh; /* 15% of viewport height */
-  object-fit: cover;
+  max-height: 15vh;
+  width: auto;
+  height: auto;
   display: block;
+  margin: 0 auto;
 }
 
 
@@ -33,11 +34,26 @@ body {
   position: absolute;
   bottom: 10px;
   right: 30px;
-  background: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
   font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #a5b4fc;
 }
+
+.theme-switcher select {
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  color: #1e3a8a;
+  cursor: pointer;
+  outline: none;
+}
+
 
 .portfolio-section,
 .tech-section {
@@ -176,6 +192,78 @@ h2 {
 .theme-forest .theme-switcher {
   background: #14532d;
   color: #f0fdf4;
+}
+
+/* THEME: LAVENDER */
+.theme-lavender {
+  background-color: #f3e8ff;
+  color: #4b0082;
+}
+.theme-lavender .card,
+.theme-lavender .tech-card,
+.theme-lavender .theme-switcher {
+  background: #e9d5ff;
+  color: #4b0082;
+}
+
+/* THEME: SUNSET */
+.theme-sunset {
+  background-color: #fff1f2;
+  color: #be123c;
+}
+.theme-sunset .card,
+.theme-sunset .tech-card,
+.theme-sunset .theme-switcher {
+  background: #fecdd3;
+  color: #7f1d1d;
+}
+
+/* THEME: MATRIX */
+.theme-matrix {
+  background-color: #000000;
+  color: #00ff00;
+}
+.theme-matrix .card,
+.theme-matrix .tech-card,
+.theme-matrix .theme-switcher {
+  background: #003300;
+  color: #00ff00;
+}
+
+/* THEME: SKY BLUE */
+.theme-sky-blue {
+  background-color: #e0f7ff;
+  color: #0369a1;
+}
+.theme-sky-blue .card,
+.theme-sky-blue .tech-card,
+.theme-sky-blue .theme-switcher {
+  background: #bae6fd;
+  color: #0369a1;
+}
+
+/* THEME: SAND */
+.theme-sand {
+  background-color: #fef3c7;
+  color: #78350f;
+}
+.theme-sand .card,
+.theme-sand .tech-card,
+.theme-sand .theme-switcher {
+  background: #fde68a;
+  color: #78350f;
+}
+
+/* THEME: CONTRAST */
+.theme-contrast {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+.theme-contrast .card,
+.theme-contrast .tech-card,
+.theme-contrast .theme-switcher {
+  background: #ffffff;
+  color: #000000;
 }
 
 /* Add more themes as needed using the same pattern */
