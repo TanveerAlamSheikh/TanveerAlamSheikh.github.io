@@ -4,69 +4,289 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tanveer's Portfolio Hub</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f2ef;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Layout Container */
+    .layout {
+      width: 100%;
+      max-width: 1128px;
+      background-color: white;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.1);
+      min-height: 100vh;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 2rem;
+      margin: 0 auto;
+    }
+
+    h2 {
+      color: #191919;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      margin: 0.5rem 0 2rem;
+      background-color: rgba(0, 0, 0, 0.08);
+      transition: background-color 0.3s ease;
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Portfolio & Tech Cards */
+    .portfolio-section {
+      margin-top: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .tech-card,
+    .portfolio-card {
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+      border-radius: 8px;
+      background: white;
+      height: 200px;
+      padding: 1rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    a.tech-card,
+    a.portfolio-card {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .portfolio-card:hover,
+    .tech-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Portfolio Image */
+    .portfolio-img {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .tech-card img,
+    .portfolio-img img {
+      max-height: 100px;
+      border-radius: 8px;
+      object-fit: contain;
+      display: block;
+      margin: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .tech-card span,
+    .portfolio-info h3 {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 4px 12px;
+      font-size: 0.85rem;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .tech-card:hover span,
+    .portfolio-card:hover .portfolio-info h3 {
+      opacity: 1;
+    }
+
+    .portfolio-info h3 {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #000;
+      transition: color 0.3s ease;
+    }
+
+    /* View Button */
+    .view-btn {
+      display: none;
+      margin-top: 0.4rem;
+      padding: 0.3rem 1rem;
+      font-size: 0.85rem;
+      background: #0a66c2;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .portfolio-card:hover .view-btn {
+      display: inline-block;
+    }
+
+    .view-btn:hover {
+      background: #004182;
+    }
+
+    .portfolio-card.coming-soon .view-btn {
+      display: none !important;
+    }
+
+    .coming-soon p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    /* Theme Switcher with Icons */
+    .theme-switcher {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-icon {
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .sun-icon {
+      display: block;
+      color: #f39c12;
+    }
+
+    .moon-icon {
+      display: none;
+      color: #34495e;
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .layout {
+      background-color: #1e1e1e;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    body.dark-mode h2 {
+      color: #ffffff;
+    }
+
+    body.dark-mode .section-divider {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    body.dark-mode .tech-card,
+    body.dark-mode .portfolio-card {
+      background-color: #2d2d2d;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-mode .portfolio-info h3 {
+      color: #ffffff;
+    }
+
+    body.dark-mode .coming-soon p {
+      color: #aaaaaa;
+    }
+
+    body.dark-mode .theme-switcher {
+      background: rgba(30, 30, 30, 0.9);
+    }
+
+    body.dark-mode .sun-icon {
+      display: none;
+    }
+
+    body.dark-mode .moon-icon {
+      display: block;
+    }
+
+    /* Responsive Layout */
+    @media screen and (max-width: 768px) {
+      .main-content {
+        padding: 1rem;
+      }
+    
+      .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    
+      .layout {
+        box-shadow: none;
+      }
+
+      .theme-switcher {
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
 </head>
-<body class="theme-default">
+<body class="light-mode">
+  <!-- Theme Switcher with Icons -->
+  <div class="theme-switcher" id="themeSwitcher">
+    <span class="theme-icon sun-icon">☀️</span>
+    <span class="theme-icon moon-icon">🌙</span>
+  </div>
+
   <div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-content">
-        <!-- Banner -->
-        <div class="banner-img">
-          <img src="assets/Hubbanner.png" alt="Banner" />
-          <div class="avatar-frame">
-            <img src="assets/github_avatar.png" class="avatar-img" alt="Avatar" />
-          </div>
-        </div>
-
-        <!-- Theme Selector -->
-        <div class="theme-switcher">
-          <label for="themeSelect">🎨 Theme:</label>
-          <select id="themeSelect">
-            <option>Default</option>
-            <option>Dark</option>
-            <option>Light</option>
-            <option>Ocean</option>
-            <option>Forest</option>
-            <option>Lavender</option>
-            <option>Sunset</option>
-            <option>Matrix</option>
-            <option>Sky Blue</option>
-            <option>Sand</option>
-            <option>Contrast</option>
-          </select>
-        </div>
-
-        <!-- Tree Menu -->
-        <div class="tree-menu">
-          <ul>
-            <li><strong>📁 Portfolio Views</strong>
-              <ul>
-                <li><a href="portfolio/view1/index.html">Portfolio 1</a></li>
-                <li>Portfolio 2 (Coming Soon)</li>
-              </ul>
-            </li>
-            <div style="height: 2rem;"></div>
-            <li><strong>📁 Technologies</strong>
-              <ul>
-                <li><a href="https://tanveeralamsheikh.github.io/powerbi-projects/index.html">Power BI</a></li>
-                <li>Excel</li>
-                <li>VBA</li>
-                <li>PowerShell</li>
-                <li>Access</li>
-                <li>SQL</li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
+    <!-- Main Content Only -->
     <main class="main-content">
-      <!-- Sidebar Toggle Button -->
-      <button id="toggleSidebar" title="Toggle Sidebar">☰</button>
-
       <!-- Portfolio Section -->
       <section class="portfolio-section">
         <h2>Portfolio Views</h2>
@@ -74,7 +294,7 @@
 
         <div class="card-grid">
           <!-- Portfolio 1-->
-          <a href="portfolio/view1/index.html" class="portfolio-card">
+          <a href="portfolio/view1/portfolio1.html" class="portfolio-card">
             <div class="portfolio-img">
               <img src="portfolio/view1/src/snap.jpeg" alt="Portfolio 1 Snapshot" />
             </div>
@@ -85,7 +305,7 @@
           </a>
 
           <!-- Portfolio 2-->
-          <a href="portfolio/view2/index.html" class="portfolio-card">
+          <a href="portfolio/view2/portfolio2.html" class="portfolio-card">
             <div class="portfolio-img">
               <img src="portfolio/view2/assets/snap.jpg" alt="Portfolio 1 Snapshot" />
             </div>
@@ -95,20 +315,18 @@
             </div>
           </a>
           
-          <!-- Portfolio Comming Soon-->
+          <!-- Portfolio Coming Soon-->
           <div class="portfolio-card coming-soon">
             <div class="portfolio-img">
               <img src="assets/placeholder.png" alt="Coming Soon" />
             </div>
             <div class="portfolio-info">
-              <h3>Portfolio 2</h3>
+              <h3>Portfolio 3</h3>
               <p>Coming Soon...</p>
             </div>
           </div>
         </div>
       </section>
-  
-      <!--<div style="height: 3rem;"></div>-->
 
       <!-- Technology Section -->
       <section class="tech-section">
@@ -116,13 +334,11 @@
         <div class="section-divider"></div>
         <div class="card-grid">
             <a href="https://tanveeralamsheikh.github.io/powerbi-projects/index.html" class="tech-card">
-            <!-- <a href="https://tanveeralamsheikh.github.io/powerbi-projects/index.html" target="_blank" class="tech-card"> -->
               <img src="assets/powerbi.png" alt="Power BI">
-              <span>Power BI Porjects</span>
+              <span>Power BI Projects</span>
               <button class="view-btn">View Now</button>
             </a>
           
-          <!-- <div class="tech-card"><img src="assets/powerbi.png" alt="Power BI"><span>Power BI</span></div> -->
           <div class="tech-card"><img src="assets/excel.png" alt="Excel"><span>Excel</span></div>
           <div class="tech-card"><img src="assets/vba.png" alt="VBA"><span>VBA</span></div>
           <div class="tech-card"><img src="assets/powershell.png" alt="PowerShell"><span>PowerShell</span></div>
@@ -133,7 +349,28 @@
     </main>
   </div>
 
-  <!-- JS -->
-  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const themeSwitcher = document.getElementById('themeSwitcher');
+      const body = document.body;
+
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+      }
+
+      // Theme toggle event
+      themeSwitcher.addEventListener('click', function() {
+        if (body.classList.contains('dark-mode')) {
+          body.classList.remove('dark-mode');
+          localStorage.setItem('theme', 'light');
+        } else {
+          body.classList.add('dark-mode');
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
