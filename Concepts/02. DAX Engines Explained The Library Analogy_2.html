@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAX Engines Explained: Formula Engine vs Storage Engine</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00b4d8;
+            --secondary: #0077b6;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-blue: #caf0f8;
+            --light-red: #ffe5e5;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+        
+        h1 {
+            color: var(--secondary);
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Main Content Layout */
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .sidebar h3 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-blue);
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .sidebar-nav a {
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-nav a:hover {
+            background: var(--light-blue);
+            color: var(--secondary);
+        }
+        
+        .sidebar-nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .main-content {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        /* Section Cards */
+        .section-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 20px 25px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .card-header h2 {
+            font-size: 1.6rem;
+        }
+        
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .toggle-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .card-content {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+        }
+        
+        .card-content.expanded {
+            max-height: 3000px;
+            padding: 25px;
+            overflow-y: auto;
+        }
+        
+        /* Special styling for workflow section with more content */
+        #workflow .card-content.expanded {
+            max-height: 2000px;
+        }
+        
+        /* Scrollbar styling */
+        .card-content.expanded::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .card-content.expanded::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .card-content.expanded::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        .card-content.expanded::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+        
+        /* Librarian Cards */
+        .librarian-cards {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .librarian-card {
+            flex: 1;
+            padding: 25px;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+        
+        .speed-librarian {
+            background: var(--light-blue);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .analytical-librarian {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .librarian-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .librarian-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .librarian-card h3 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        /* DAX Code Examples */
+        .dax-example {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+        
+        .dax-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .dax-title h4 {
+            color: var(--secondary);
+        }
+        
+        .performance-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .badge-fast {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-slow {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        pre {
+            background: var(--dark);
+            color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            line-height: 1.4;
+        }
+        
+        /* Interactive Exercise */
+        .interactive-exercise {
+            background: #e8f4f8;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .question-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--light-blue);
+        }
+        
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--light-blue);
+        }
+        
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        /* Visualization */
+        .visualization {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .engine-visual {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .engine-box {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .engine-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .fe-box {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        
+        .vp-box {
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            color: var(--gray);
+        }
+        
+        /* Workflow Steps */
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 25px 0;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+            position: relative;
+            counter-increment: step-counter;
+        }
+        
+        .step::before {
+            content: "Step " counter(step-counter);
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .ref-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+        
+        .ref-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Content Summary Box */
+        .content-summary {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .content-summary h4 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Scroll Indicator */
+        .scroll-indicator {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .scroll-indicator i {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .librarian-cards {
+                flex-direction: column;
+            }
+            
+            #workflow .card-content.expanded {
+                max-height: 2500px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .engine-visual {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+            
+            .step {
+                padding: 20px 15px;
+            }
+            
+            #workflow .card-content.expanded {
+                max-height: 3000px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-brain"></i> DAX Engines Explained</h1>
+            <p class="subtitle">The Library Analogy: Understanding Power BI's Formula Engine and Storage Engine</p>
+            
+            <div class="nav-container">
+                <button class="nav-btn active" data-section="intro">
+                    <i class="fas fa-home"></i> Introduction
+                </button>
+                <button class="nav-btn" data-section="librarians">
+                    <i class="fas fa-users"></i> Meet the Librarians
+                </button>
+                <button class="nav-btn" data-section="workflow">
+                    <i class="fas fa-cogs"></i> How They Work Together
+                </button>
+                <button class="nav-btn" data-section="mistakes">
+                    <i class="fas fa-exclamation-triangle"></i> Common Mistakes
+                </button>
+                <button class="nav-btn" data-section="rules">
+                    <i class="fas fa-graduation-cap"></i> Golden Rules
+                </button>
+                <button class="nav-btn" data-section="exercise">
+                    <i class="fas fa-puzzle-piece"></i> Interactive Exercise
+                </button>
+            </div>
+        </header>
+        
+        <div class="content-wrapper">
+            <div class="sidebar">
+                <h3><i class="fas fa-map-signs"></i> Navigation</h3>
+                <div class="sidebar-nav">
+                    <a href="#" class="active" data-section="intro">
+                        <i class="fas fa-book-reader"></i> Introduction: Two Librarians
+                    </a>
+                    <a href="#" data-section="librarians">
+                        <i class="fas fa-user-tie"></i> The Speed Librarian (Storage Engine)
+                    </a>
+                    <a href="#" data-section="analytical">
+                        <i class="fas fa-user-graduate"></i> The Analytical Librarian (Formula Engine)
+                    </a>
+                    <a href="#" data-section="workflow">
+                        <i class="fas fa-handshake"></i> How They Work Together
+                    </a>
+                    <a href="#" data-section="visual">
+                        <i class="fas fa-project-diagram"></i> Visualization
+                    </a>
+                    <a href="#" data-section="mistakes">
+                        <i class="fas fa-bug"></i> Common DAX Mistakes
+                    </a>
+                    <a href="#" data-section="examples">
+                        <i class="fas fa-code"></i> DAX Examples
+                    </a>
+                    <a href="#" data-section="rules">
+                        <i class="fas fa-trophy"></i> Golden Rules
+                    </a>
+                    <a href="#" data-section="exercise">
+                        <i class="fas fa-gamepad"></i> Interactive Exercise
+                    </a>
+                    <a href="#" data-section="reference">
+                        <i class="fas fa-clipboard-list"></i> Quick Reference
+                    </a>
+                </div>
+                
+                <div class="content-summary">
+                    <h4><i class="fas fa-info-circle"></i> Content Summary</h4>
+                    <p>This training covers:</p>
+                    <ul>
+                        <li>2 DAX Engines & their roles</li>
+                        <li>5-Step workflow process</li>
+                        <li>8 Common mistakes to avoid</li>
+                        <li>6 Golden rules for efficient DAX</li>
+                        <li>Interactive exercises & examples</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <!-- Introduction Section -->
+                <section id="intro" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-book-open"></i> Introduction: Two Librarians, One Goal</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content expanded">
+                        <p>Imagine you're in a massive library with millions of books (your data). You need answers to specific questions (your reports). Two different librarians help you:</p>
+                        
+                        <div class="librarian-cards">
+                            <div class="librarian-card speed-librarian">
+                                <div class="librarian-icon">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h3>Formula Engine (FE)</h3>
+                                <p><strong>The Analytical Librarian</strong></p>
+                                <ul>
+                                    <li>Thinks deeply about complex questions</li>
+                                    <li>Can only handle one request at a time</li>
+                                    <li>Plans the search strategy</li>
+                                    <li>Combines information from multiple sources</li>
+                                    <li><strong>Single-threaded</strong> - Works on one problem at a time</li>
+                                    <li><strong>Understanding</strong> - Knows relationships between tables</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="librarian-card analytical-librarian">
+                                <div class="librarian-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <h3>Storage Engine (VertiPaq)</h3>
+                                <p><strong>The Speed Librarian</strong></p>
+                                <ul>
+                                    <li>Lightning-fast at finding specific information</li>
+                                    <li>Can fetch multiple things simultaneously</li>
+                                    <li>Knows exactly where everything is stored</li>
+                                    <li>Has pre-organized indexes of everything</li>
+                                    <li><strong>Multi-threaded</strong> - Handles many requests at once</li>
+                                    <li><strong>Columnar storage</strong> - Data organized by columns, not rows</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="interactive-exercise">
+                            <h3><i class="fas fa-lightbulb"></i> Think About It:</h3>
+                            <p>If you asked "How many books about mammals were published in 2020?", which librarian would:</p>
+                            
+                            <div class="options">
+                                <div class="option" data-correct="true">1. Look up the pre-counted number in their index</div>
+                                <div class="option" data-correct="false">2. Go through each book one by one to check</div>
+                            </div>
+                            
+                            <div class="feedback correct">
+                                <i class="fas fa-check-circle"></i> <strong>Correct!</strong> The Speed Librarian (Storage Engine) already has this counted in their index!
+                            </div>
+                            <div class="feedback incorrect">
+                                <i class="fas fa-times-circle"></i> <strong>Not quite.</strong> That's what the Analytical Librarian would do, and it would be much slower.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Speed Librarian Section -->
+                <section id="librarians" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-bolt"></i> The Speed Librarian (Storage Engine/VertiPaq)</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content">
+                        <p>The Storage Engine is optimized for one thing: <strong>speed</strong>. It doesn't understand complex logic, but it's incredibly fast at fetching pre-organized data.</p>
+                        
+                        <h3>What They Do:</h3>
+                        <ul>
+                            <li>Creates a <strong>massive, super-organized index</strong> of every book (your data)</li>
+                            <li>Instead of storing books normally, they create specialized lists:
+                                <ul>
+                                    <li>"List of all red books" ✅</li>
+                                    <li>"List of all books published in 2020" ✅</li>
+                                    <li>"List of books by J.K. Rowling" ✅</li>
+                                </ul>
+                            </li>
+                            <li><strong>Columnar Database:</strong> Stores data by columns, not rows
+                                <ul>
+                                    <li>All "Color" values stored together</li>
+                                    <li>All "Price" values stored together</li>
+                                    <li>All "Date" values stored together</li>
+                                </ul>
+                            </li>
+                            <li><strong>Compression:</strong> Uses advanced compression to reduce memory usage
+                                <ul>
+                                    <li>Repeats values are stored once</li>
+                                    <li>Uses dictionary encoding</li>
+                                    <li>Bitpacking for numbers</li>
+                                </ul>
+                            </li>
+                            <li><strong>Their superpower:</strong> If you ask "How many red books do we have?" they instantly know the answer because they already counted them</li>
+                            <li><strong>Their limitation:</strong> Only understands simple, direct questions like:
+                                <ul>
+                                    <li>"Count of X where Y = Z" ✅</li>
+                                    <li>"Sum of all values in column A" ✅</li>
+                                    <li>"List of unique values in column B" ✅</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-code"></i> Example Request They LOVE:</h4>
+                                <span class="performance-badge badge-fast">Fast!</span>
+                            </div>
+                            <p><em>"Give me the total number of sales in January 2023"</em></p>
+                            <pre>CALCULATE(
+    SUM(Sales[Amount]),
+    'Date'[Year] = 2023,
+    'Date'[Month] = "January"
+)</pre>
+                            <p><strong>Result:</strong> They already have this counted! Instant answer.</p>
+                            <p><strong>Why it's fast:</strong> The Storage Engine can scan the compressed columns for Year=2023 and Month="January" simultaneously, then sum the matching Amount values.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Analytical Librarian Section -->
+                <section id="analytical" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-user-graduate"></i> The Analytical Librarian (Formula Engine)</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content">
+                        <p>The Formula Engine is the <strong>thinker</strong>. It understands complex logic and relationships between different pieces of data.</p>
+                        
+                        <h3>What They Do:</h3>
+                        <ul>
+                            <li>Understands complex, multi-step questions</li>
+                            <li>Can combine information from multiple sources</li>
+                            <li>Figures out <em>how</em> to get answers by asking the Speed Librarian for pieces</li>
+                            <li>Understands relationships between tables</li>
+                            <li>Handles <strong>context</strong> (row context and filter context)</li>
+                            <li>Performs calculations that require logic (IF statements, time intelligence)</li>
+                            <li><strong>Their superpower:</strong> Can answer questions like "What was the percentage change in sales of red books compared to last month?"</li>
+                            <li><strong>Their limitation:</strong> Works on <strong>one question at a time</strong> and can get overwhelmed by complex nested calculations</li>
+                        </ul>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-code"></i> Complex Question They Handle:</h4>
+                            </div>
+                            <p><em>"What was our profit margin by product category last quarter, and how does it compare to the same quarter last year?"</em></p>
+                            <pre>YoY Profit Comparison = 
+VAR CurrentQuarterProfit = 
+    CALCULATE(
+        [Profit Margin],
+        DATESQTD('Date'[Date])
+    )
+VAR PreviousYearQuarterProfit = 
+    CALCULATE(
+        [Profit Margin],
+        SAMEPERIODLASTYEAR(DATESQTD('Date'[Date]))
+    )
+RETURN
+DIVIDE(
+    CurrentQuarterProfit - PreviousYearQuarterProfit,
+    PreviousYearQuarterProfit
+)</pre>
+                            <p><strong>Process:</strong> They break this down into pieces, ask the Speed Librarian for revenue and profit data, then calculate the percentage.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Workflow Section - FIXED WITH SCROLLING -->
+                <section id="workflow" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-cogs"></i> How They Work Together - Complete Process</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content">
+                        <p>Let's walk through a complete example to understand how these two engines collaborate to answer complex questions.</p>
+                        
+                        <div class="content-summary">
+                            <h4><i class="fas fa-list-ol"></i> Process Overview</h4>
+                            <p><strong>Question:</strong> "What was the average sale amount for red products in January, compared to blue products?"</p>
+                            <p>This seemingly simple question requires multiple steps that demonstrate the engine collaboration.</p>
+                        </div>
+                        
+                        <div class="workflow-steps">
+                            <div class="step">
+                                <h3><span class="step-number">1</span> User Asks the Question</h3>
+                                <p>The user creates a visual or measure asking for comparison between red and blue product averages in January.</p>
+                                <p><strong>DAX Query Example:</strong></p>
+                                <pre>Color Comparison = 
+VAR RedAvg = 
+    CALCULATE(
+        AVERAGE(Sales[Amount]),
+        Products[Color] = "Red",
+        'Date'[Month] = "January"
+    )
+VAR BlueAvg = 
+    CALCULATE(
+        AVERAGE(Sales[Amount]),
+        Products[Color] = "Blue", 
+        'Date'[Month] = "January"
+    )
+RETURN
+DIVIDE(RedAvg, BlueAvg)</pre>
+                            </div>
+                            
+                            <div class="step">
+                                <h3><span class="step-number">2</span> Formula Engine (Analytical Librarian) Analyzes</h3>
+                                <p>The Formula Engine receives this request and realizes it needs to:</p>
+                                <ul>
+                                    <li>Calculate average for red products in January</li>
+                                    <li>Calculate average for blue products in January</li>
+                                    <li>Divide them to get the comparison</li>
+                                </ul>
+                                <p>It understands that "AVERAGE" = SUM / COUNT, so it breaks this down further into <strong>4 core requests</strong>:</p>
+                                <ol>
+                                    <li>Total sales amount for red products in January</li>
+                                    <li>Number of red product sales in January</li>
+                                    <li>Total sales amount for blue products in January</li>
+                                    <li>Number of blue product sales in January</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="step">
+                                <h3><span class="step-number">3</span> Delegating to Storage Engine</h3>
+                                <p>The Formula Engine creates optimized queries for the Storage Engine:</p>
+                                <div class="dax-example">
+                                    <h4>Storage Engine Query 1:</h4>
+                                    <pre>SELECT 
+    SUM(Sales[Amount]) AS SumRed,
+    COUNTROWS(Sales) AS CountRed
+FROM Sales
+INNER JOIN Products ON Sales[ProductID] = Products[ProductID]
+INNER JOIN Date ON Sales[DateKey] = Date[DateKey]
+WHERE Products[Color] = "Red"
+    AND Date[Month] = "January"</pre>
+                                </div>
+                                
+                                <div class="dax-example">
+                                    <h4>Storage Engine Query 2:</h4>
+                                    <pre>SELECT 
+    SUM(Sales[Amount]) AS SumBlue,
+    COUNTROWS(Sales) AS CountBlue
+FROM Sales
+INNER JOIN Products ON Sales[ProductID] = Products[ProductID]
+INNER JOIN Date ON Sales[DateKey] = Date[DateKey]
+WHERE Products[Color] = "Blue"
+    AND Date[Month] = "January"</pre>
+                                </div>
+                                <p><strong>Note:</strong> These queries are simplified representations. The actual Storage Engine queries are more optimized.</p>
+                            </div>
+                            
+                            <div class="step">
+                                <h3><span class="step-number">4</span> Storage Engine (Speed Librarian) Executes</h3>
+                                <p>The Storage Engine receives these queries and uses its optimized structures:</p>
+                                <ul>
+                                    <li><strong>Column Scanning:</strong> Scans the Color column in the Products table (compressed)</li>
+                                    <li><strong>Bitmap Indexes:</strong> Uses pre-built indexes to find red/blue products quickly</li>
+                                    <li><strong>Relationship Navigation:</strong> Follows relationships to find corresponding sales</li>
+                                    <li><strong>Aggregation:</strong> Sums the Amount column only for matching rows</li>
+                                    <li><strong>Parallel Processing:</strong> Can process multiple queries simultaneously</li>
+                                </ul>
+                                <p>Returns results in milliseconds:</p>
+                                <pre>Query 1 Result: {SumRed: 15000, CountRed: 300}
+Query 2 Result: {SumBlue: 22000, CountBlue: 400}</pre>
+                            </div>
+                            
+                            <div class="step">
+                                <h3><span class="step-number">5</span> Formula Engine Calculates Final Result</h3>
+                                <p>With all data received, the Formula Engine performs the final calculations:</p>
+                                <div class="dax-example">
+                                    <h4>Final Calculation:</h4>
+                                    <pre>Red Average = 15000 / 300 = 50
+Blue Average = 22000 / 400 = 55
+Comparison = 50 / 55 = 0.909 (90.9%)</pre>
+                                </div>
+                                <p>The Formula Engine returns the final result: <strong>Red products average 90.9% of blue products' average sale amount.</strong></p>
+                            </div>
+                        </div>
+                        
+                        <div class="visualization">
+                            <div class="engine-visual">
+                                <div class="engine-box fe-box">
+                                    <i class="fas fa-brain fa-2x"></i>
+                                    <p>Formula Engine</p>
+                                    <small>Analytical Librarian</small>
+                                </div>
+                                
+                                <div class="arrow">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                
+                                <div class="engine-box vp-box">
+                                    <i class="fas fa-database fa-2x"></i>
+                                    <p>Storage Engine</p>
+                                    <small>Speed Librarian</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="interactive-exercise">
+                            <h4><i class="fas fa-question-circle"></i> Critical Thinking:</h4>
+                            <p>What happens if we add another condition, like "only for stores in New York"?</p>
+                            
+                            <div class="options">
+                                <div class="option" data-correct="true">A. Formula Engine adds another filter to the Storage Engine queries</div>
+                                <div class="option" data-correct="false">B. Formula Engine processes this separately after getting initial results</div>
+                                <div class="option" data-correct="false">C. Storage Engine rejects the query as too complex</div>
+                            </div>
+                            
+                            <div class="feedback correct">
+                                <i class="fas fa-check-circle"></i> <strong>Correct!</strong> The Formula Engine modifies the queries sent to Storage Engine to include the additional filter.
+                            </div>
+                            <div class="feedback incorrect">
+                                <i class="fas fa-times-circle"></i> <strong>Not quite.</strong> The Formula Engine's job is to prepare complete queries for the Storage Engine with all filters applied.
+                            </div>
+                        </div>
+                        
+                        <div class="scroll-indicator">
+                            <i class="fas fa-mouse-pointer"></i> Scroll to see all steps
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Common Mistakes Section -->
+                <section id="mistakes" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Common DAX Mistakes & Performance Issues</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content">
+                        <p>These are common patterns that look correct but cause performance problems or incorrect results.</p>
+                        
+                        <h3>Mistake 1: Asking the Wrong Librarian (Forcing FE to do SE's Job)</h3>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-times-circle"></i> Slow Way (Forcing Analytical Thinking on Simple Task)</h4>
+                                <span class="performance-badge badge-slow">Slow!</span>
+                            </div>
+                            <pre>Slow Way = 
+SUMX(
+    FILTER(Sales, Sales[Color] = "Red"),
+    Sales[Amount]
+)</pre>
+                            <p><strong>What happens:</strong></p>
+                            <ul>
+                                <li>Formula Engine retrieves ALL sales data from Storage Engine</li>
+                                <li>Formula Engine then filters them row by row in memory</li>
+                                <li>Formula Engine then sums the filtered rows</li>
+                                <li><strong>Result:</strong> High memory usage and slow performance</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-check-circle"></i> Fast Way (Letting Storage Engine Do Its Job)</h4>
+                                <span class="performance-badge badge-fast">Fast!</span>
+                            </div>
+                            <pre>Fast Way = 
+CALCULATE(
+    SUM(Sales[Amount]),
+    Sales[Color] = "Red"
+)</pre>
+                            <p><strong>What happens:</strong></p>
+                            <ul>
+                                <li>Formula Engine sends a single query to Storage Engine</li>
+                                <li>Storage Engine uses its columnar indexes to filter and sum</li>
+                                <li>Storage Engine returns only the final result</li>
+                                <li><strong>Result:</strong> Minimal data transfer and instant response</li>
+                            </ul>
+                        </div>
+                        
+                        <h3>Mistake 2: Too Many Back-and-Forth Trips (Callback DataID)</h3>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-times-circle"></i> Inefficient (Multiple Round Trips)</h4>
+                                <span class="performance-badge badge-slow">Inefficient!</span>
+                            </div>
+                            <pre>Inefficient = 
+AVERAGEX(
+    VALUES(Products[Category]),
+    [Total Sales]  -- This causes a separate request FOR EACH CATEGORY!
+)</pre>
+                            <p><strong>The Problem:</strong> For each category (Electronics, Clothing, Furniture, etc.), the Formula Engine makes a separate call to the Storage Engine.</p>
+                            <p><strong>Visual:</strong> Imagine asking the Speed Librarian to go back to the stacks 10 separate times instead of getting all the books at once.</p>
+                        </div>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-check-circle"></i> Efficient (Single Request)</h4>
+                                <span class="performance-badge badge-fast">Efficient!</span>
+                            </div>
+                            <pre>Efficient = 
+VAR CategorySales = 
+    SUMMARIZE(
+        Sales,
+        Products[Category],
+        "Sales", SUM(Sales[Amount])
+    )
+RETURN
+AVERAGEX(CategorySales, [Sales])</pre>
+                            <p><strong>Why it's better:</strong> Gets all category totals in one Storage Engine query, then averages them in memory.</p>
+                        </div>
+                        
+                        <h3>Mistake 3: Materializing Large Intermediate Tables</h3>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-times-circle"></i> Memory Intensive (Creates Huge Table)</h4>
+                                <span class="performance-badge badge-slow">Memory Hog!</span>
+                            </div>
+                            <pre>Memory Intensive = 
+SUMX(
+    CROSSJOIN(Products, Date),
+    [Sales Amount]
+)</pre>
+                            <p><strong>The Problem:</strong> Creates a Cartesian product of all products × all dates in memory before calculation.</p>
+                            <p><strong>Example:</strong> 1000 products × 1000 dates = 1,000,000 rows in memory!</p>
+                        </div>
+                        
+                        <h3>Mistake 4: Ignoring Context Transition</h3>
+                        
+                        <div class="dax-example">
+                            <div class="dax-title">
+                                <h4><i class="fas fa-times-circle"></i> Unexpected Results</h4>
+                                <span class="performance-badge badge-slow">Wrong Output!</span>
+                            </div>
+                            <pre>Wrong Total = 
+SUMX(
+    Sales,
+    CALCULATE(SUM(Sales[Amount]))  -- Context transition happens!
+)</pre>
+                            <p><strong>The Problem:</strong> CALCULATE inside SUMX causes context transition for each row, which can lead to unexpected results and poor performance.</p>
+                        </div>
+                        
+                        <div class="interactive-exercise">
+                            <h4><i class="fas fa-question-circle"></i> Test Your Understanding:</h4>
+                            <p>Which of these approaches is better for performance?</p>
+                            
+                            <div class="options">
+                                <div class="option" data-correct="false">A. Asking for each row individually with SUMX</div>
+                                <div class="option" data-correct="true">B. Asking for a total with CALCULATE(SUM())</div>
+                                <div class="option" data-correct="false">C. Using FILTER inside every calculation</div>
+                                <div class="option" data-correct="false">D. Creating calculated columns for everything</div>
+                            </div>
+                            
+                            <div class="feedback correct">
+                                <i class="fas fa-check-circle"></i> <strong>Correct!</strong> Option B lets the Storage Engine use its pre-calculated indexes and columnar storage.
+                            </div>
+                            <div class="feedback incorrect">
+                                <i class="fas fa-times-circle"></i> <strong>Try again.</strong> Remember: The Storage Engine is optimized for aggregations with filters.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Golden Rules Section -->
+                <section id="rules" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-trophy"></i> The Golden Rules of Efficient DAX</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content">
+                        <div class="quick-ref-grid">
+                            <div class="ref-item">
+                                <h4><i class="fas fa-rule-1"></i> Rule 1: Let the Speed Librarian Work</h4>
+                                <p>Use <code>CALCULATE()</code> with simple aggregations (<code>SUM</code>, <code>COUNT</code>, <code>AVERAGE</code>) and filters.</p>
+                                <p><strong>Do:</strong> <code>CALCULATE(SUM(Sales[Amount]), Sales[Color] = "Red")</code></p>
+                                <p><strong>Avoid:</strong> <code>SUMX(FILTER(Sales, Sales[Color] = "Red"), Sales[Amount])</code></p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-rule-2"></i> Rule 2: Minimize Engine Round Trips</h4>
+                                <p>Use variables to store results and reuse them instead of recalculating.</p>
+                                <pre>VAR TotalSales = [Total Sales]
+VAR TaxRate = 0.1
+RETURN TotalSales * TaxRate</pre>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-rule-3"></i> Rule 3: Organize Your Data Library</h4>
+                                <p>Create proper relationships, use integer IDs, and build a dedicated Date table.</p>
+                                <p><strong>Column Cardinality Matters:</strong> High distinct values = larger memory usage.</p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-rule-4"></i> Rule 4: Ask for Summaries, Not Details</h4>
+                                <p>The Storage Engine loves: <strong>"Give me the total of X where Y = Z"</strong></p>
+                                <p>It hates: <strong>"Give me every X so I can calculate the total myself"</strong></p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-rule-5"></i> Rule 5: Use DIVIDE() Instead of "/"</h4>
+                                <p><code>DIVIDE()</code> handles divide-by-zero errors gracefully.</p>
+                                <p><strong>Do:</strong> <code>DIVIDE([Sales], [Customers], 0)</code></p>
+                                <p><strong>Avoid:</strong> <code>[Sales] / [Customers]</code></p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-rule-6"></i> Rule 6: Avoid Unnecessary Iterators</h4>
+                                <p>Use iterators (<code>SUMX</code>, <code>AVERAGEX</code>) only when you need row-by-row logic.</p>
+                                <p>For simple aggregations, use the non-iterator versions (<code>SUM</code>, <code>AVERAGE</code>).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="content-summary">
+                            <h4><i class="fas fa-lightbulb"></i> Writing Good DAX is Like Being a Good Manager:</h4>
+                            <ul>
+                                <li><strong>Delegate</strong> simple, repetitive tasks to your fast employee (Storage Engine)</li>
+                                <li><strong>Reserve</strong> complex thinking for yourself (Formula Engine)</li>
+                                <li><strong>Organize</strong> information so it's easy to find (data modeling)</li>
+                                <li><strong>Plan ahead</strong> to minimize work (variables, efficient patterns)</li>
+                                <li><strong>Communicate clearly</strong> (write clean, understandable DAX)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Interactive Exercise Section -->
+                <section id="exercise" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-puzzle-piece"></i> Interactive Exercise: Coffee Chain Scenario</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content">
+                        <div class="interactive-exercise">
+                            <h3><i class="fas fa-coffee"></i> Coffee Chain Management Scenario</h3>
+                            <p>You manage a coffee chain with 100 stores. You want to analyze performance with this question:</p>
+                            <div class="question-box">
+                                <p><strong>"Which stores had sales increase by more than 20% from Monday to Tuesday this week, and what was their average transaction value on Tuesday?"</strong></p>
+                            </div>
+                            
+                            <div class="question-box">
+                                <h5>Question 1: Which part should the Storage Engine handle?</h5>
+                                <div class="options">
+                                    <div class="option" data-correct="true">A. Getting Monday and Tuesday sales totals per store</div>
+                                    <div class="option" data-correct="false">B. Calculating the percentage increase</div>
+                                    <div class="option" data-correct="false">C. Determining which stores exceeded 20%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="question-box">
+                                <h5>Question 2: How many Storage Engine queries should we aim for?</h5>
+                                <div class="options">
+                                    <div class="option" data-correct="false">A. One for each store (100 queries)</div>
+                                    <div class="option" data-correct="true">B. Two: Monday totals and Tuesday totals by store</div>
+                                    <div class="option" data-correct="false">C. Three: Monday totals, Tuesday totals, and Tuesday transaction counts</div>
+                                </div>
+                            </div>
+                            
+                            <div class="question-box">
+                                <h5>Question 3: What's the best structure for this DAX measure?</h5>
+                                <div class="options">
+                                    <div class="option" data-correct="false">A. Single complex measure with nested CALCULATE calls</div>
+                                    <div class="option" data-correct="true">B. Multiple variables breaking down the problem</div>
+                                    <div class="option" data-correct="false">C. Separate measures for each calculation</div>
+                                </div>
+                            </div>
+                            
+                            <button id="check-answers" class="nav-btn" style="margin-top: 20px;">
+                                <i class="fas fa-check-double"></i> Check All Answers
+                            </button>
+                            
+                            <div class="question-box" style="margin-top: 30px;">
+                                <h5><i class="fas fa-lightbulb"></i> Optimal DAX Structure for This Problem:</h5>
+                                <pre>StorePerformance = 
+VAR MondaySalesByStore = 
+    CALCULATETABLE(
+        SUMMARIZE(
+            Sales,
+            Stores[StoreID],
+            "MondaySales", SUM(Sales[Amount])
+        ),
+        'Date'[DayOfWeek] = "Monday",
+        'Date'[Week] = SELECTEDVALUE('Date'[Week])
+    )
+VAR TuesdaySalesByStore = 
+    CALCULATETABLE(
+        SUMMARIZE(
+            Sales,
+            Stores[StoreID],
+            "TuesdaySales", SUM(Sales[Amount]),
+            "TuesdayCount", COUNTROWS(Sales)
+        ),
+        'Date'[DayOfWeek] = "Tuesday",
+        'Date'[Week] = SELECTEDVALUE('Date'[Week])
+    )
+VAR CombinedData = 
+    NATURALINNERJOIN(MondaySalesByStore, TuesdaySalesByStore)
+VAR ResultTable = 
+    ADDCOLUMNS(
+        CombinedData,
+        "Growth", DIVIDE([TuesdaySales] - [MondaySales], [MondaySales]),
+        "AvgTicket", DIVIDE([TuesdaySales], [TuesdayCount])
+    )
+VAR HighGrowthStores = 
+    FILTER(ResultTable, [Growth] > 0.2)
+RETURN
+SUMMARIZE(
+    HighGrowthStores,
+    Stores[StoreID],
+    "Growth", [Growth],
+    "AvgTicket", [AvgTicket]
+)</pre>
+                                <p><strong>Why this works:</strong></p>
+                                <ul>
+                                    <li>Two Storage Engine queries (Monday and Tuesday data)</li>
+                                    <li>All calculations done in memory after data is retrieved</li>
+                                    <li>Clear separation of concerns between engines</li>
+                                    <li>Efficient use of variables to store intermediate results</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Quick Reference Section -->
+                <section id="reference" class="section-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clipboard-list"></i> Quick Reference Card</h2>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="card-content">
+                        <div class="quick-ref-grid">
+                            <div class="ref-item">
+                                <h4><i class="fas fa-hand-point-right"></i> When you see...</h4>
+                                <p><code>SUMX(Table, Expression)</code></p>
+                                <p><strong>Think...</strong></p>
+                                <p>"Analytical Librarian doing manual work row by row"</p>
+                                <p><strong>Better approach...</strong></p>
+                                <p>Can <code>CALCULATE(SUM(Column))</code> with filters do it?</p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-hand-point-right"></i> When you see...</h4>
+                                <p>Nested <code>FILTER()</code> functions</p>
+                                <p><strong>Think...</strong></p>
+                                <p>"Too many back-and-forth trips between engines"</p>
+                                <p><strong>Better approach...</strong></p>
+                                <p>Combine conditions in <code>CALCULATE()</code> or use <code>KEEPFILTERS()</code></p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-hand-point-right"></i> When you see...</h4>
+                                <p><code>EARLIER()</code> function</p>
+                                <p><strong>Think...</strong></p>
+                                <p>"Analytical Librarian getting confused about context"</p>
+                                <p><strong>Better approach...</strong></p>
+                                <p>Use variables or rewrite with <code>SUMMARIZE()</code></p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-hand-point-right"></i> When you see...</h4>
+                                <p>Text comparisons in measures</p>
+                                <p><strong>Think...</strong></p>
+                                <p>"Slow lookups in the Storage Engine dictionary"</p>
+                                <p><strong>Better approach...</strong></p>
+                                <p>Use IDs/number codes or switch to calculated columns</p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-hand-point-right"></i> When you see...</h4>
+                                <p><code>[Measure]</code> inside a loop</p>
+                                <p><strong>Think...</strong></p>
+                                <p>"Asking the same question repeatedly"</p>
+                                <p><strong>Better approach...</strong></p>
+                                <p>Store measure result in a variable before the loop</p>
+                            </div>
+                            
+                            <div class="ref-item">
+                                <h4><i class="fas fa-hand-point-right"></i> Remember:</h4>
+                                <p><strong>The Storage Engine has already organized and counted everything.</strong> Your job is to ask the right questions to get those pre-calculated answers efficiently.</p>
+                                <p>Test with DAX Studio's Server Timings to see what actually hits the storage engine.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="content-summary">
+                            <h4><i class="fas fa-key"></i> Key Performance Indicators to Monitor:</h4>
+                            <ul>
+                                <li><strong>Storage Engine Queries:</strong> Fewer is better</li>
+                                <li><strong>FE/SE Ratio:</strong> More time should be spent in SE than FE</li>
+                                <li><strong>Materialization:</strong> Watch for large in-memory tables</li>
+                                <li><strong>Callback DataID:</strong> Indicator of too many round trips</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        
+        <footer>
+            <h3><i class="fas fa-graduation-cap"></i> Training Activity & Next Steps</h3>
+            <p>Have your colleagues identify which "librarian" would handle different parts of DAX formulas. This builds intuition for writing efficient DAX from day one!</p>
+            
+            <div class="quick-ref-grid" style="margin-top: 20px;">
+                <div class="ref-item">
+                    <h4><i class="fas fa-tools"></i> Practical Exercise</h4>
+                    <p>Take an existing slow DAX measure and rewrite it following the "Golden Rules." Use DAX Studio to compare performance.</p>
+                </div>
+                
+                <div class="ref-item">
+                    <h4><i class="fas fa-book"></i> Further Learning</h4>
+                    <p>Recommended resources: SQLBI.com, DAX Patterns, Power BI documentation on performance optimization.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+                <p><strong>Key Takeaway:</strong> DAX appears simple but operates on set-based logic. The gap between "what you write" and "what executes" comes from understanding which engine does what work and optimizing the handoff between them.</p>
+                <p style="margin-top: 10px; font-size: 0.9rem; color: var(--gray);">
+                    <i class="fas fa-info-circle"></i> This interactive guide is designed for Power BI users learning DAX. Use it as a training resource for your team. Refresh the page to reset all interactive exercises.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Toggle section collapse/expand
+        document.querySelectorAll('.toggle-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const content = this.parentElement.nextElementSibling;
+                const icon = this.querySelector('i');
+                
+                if (content.classList.contains('expanded')) {
+                    content.classList.remove('expanded');
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                } else {
+                    content.classList.add('expanded');
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        // Navigation buttons
+        document.querySelectorAll('.nav-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const sectionId = this.getAttribute('data-section');
+                
+                // Update active button
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Scroll to section
+                document.getElementById(sectionId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Expand the section
+                const section = document.getElementById(sectionId);
+                const content = section.querySelector('.card-content');
+                const toggleBtn = section.querySelector('.toggle-btn i');
+                
+                if (!content.classList.contains('expanded')) {
+                    content.classList.add('expanded');
+                    toggleBtn.classList.remove('fa-chevron-down');
+                    toggleBtn.classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sectionId = this.getAttribute('data-section');
+                
+                // Update active link
+                document.querySelectorAll('.sidebar-nav a').forEach(a => {
+                    a.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Scroll to section
+                document.getElementById(sectionId).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Expand the section
+                const section = document.getElementById(sectionId);
+                const content = section.querySelector('.card-content');
+                const toggleBtn = section.querySelector('.toggle-btn i');
+                
+                if (!content.classList.contains('expanded')) {
+                    content.classList.add('expanded');
+                    toggleBtn.classList.remove('fa-chevron-down');
+                    toggleBtn.classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        // Interactive exercise options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Clear other selections in this question
+                const parent = this.parentElement;
+                parent.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Select this option
+                this.classList.add('selected');
+                
+                // Show feedback
+                const isCorrect = this.getAttribute('data-correct') === 'true';
+                const feedback = parent.nextElementSibling;
+                
+                // Hide all feedbacks first
+                parent.parentElement.querySelectorAll('.feedback').forEach(fb => {
+                    fb.style.display = 'none';
+                });
+                
+                // Show correct feedback
+                if (isCorrect) {
+                    feedback.classList.add('correct');
+                    feedback.classList.remove('incorrect');
+                } else {
+                    feedback.classList.add('incorrect');
+                    feedback.classList.remove('correct');
+                }
+            });
+        });
+        
+        // Check all answers button
+        document.getElementById('check-answers').addEventListener('click', function() {
+            // Trigger click on all selected options to show feedback
+            document.querySelectorAll('.option.selected').forEach(option => {
+                option.click();
+            });
+            
+            // Show message if not all answered
+            const unanswered = document.querySelectorAll('.question-box').length - 
+                              document.querySelectorAll('.option.selected').length;
+            
+            if (unanswered > 0) {
+                alert(`Please answer all ${unanswered} remaining question(s) before checking answers.`);
+            } else {
+                alert('All answers checked! Review the feedback for each question.');
+            }
+        });
+        
+        // Initialize: First section already expanded
+        document.querySelector('.toggle-btn i').classList.remove('fa-chevron-down');
+        document.querySelector('.toggle-btn i').classList.add('fa-chevron-up');
+        
+        // Add some interactive hover effects to engine boxes
+        document.querySelectorAll('.engine-box').forEach(box => {
+            box.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            
+            box.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Auto-expand sections when scrolling near them
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const section = entry.target;
+                    const content = section.querySelector('.card-content');
+                    const toggleBtn = section.querySelector('.toggle-btn i');
+                    
+                    if (!content.classList.contains('expanded')) {
+                        content.classList.add('expanded');
+                        toggleBtn.classList.remove('fa-chevron-down');
+                        toggleBtn.classList.add('fa-chevron-up');
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all sections except the first one
+        document.querySelectorAll('.section-card:not(:first-child)').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
