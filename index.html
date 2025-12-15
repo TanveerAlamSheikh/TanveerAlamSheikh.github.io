@@ -1,362 +1,1022 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tanveer's Portfolio Hub</title>
-  <style>
-    /* Reset & Base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f3f2ef;
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    /* Layout Container */
-    .layout {
-      width: 100%;
-      max-width: 1128px;
-      background-color: white;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.1);
-      min-height: 100vh;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    /* Main Content */
-    .main-content {
-      padding: 2rem;
-      margin: 0 auto;
-    }
-
-    h2 {
-      color: #191919;
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-      transition: color 0.3s ease;
-    }
-
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      margin: 0.5rem 0 2rem;
-      background-color: rgba(0, 0, 0, 0.08);
-      transition: background-color 0.3s ease;
-    }
-
-    /* Card Grid */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-    }
-
-    /* Portfolio & Tech Cards */
-    .portfolio-section {
-      margin-top: 1rem;
-      margin-bottom: 3rem;
-    }
-
-    .tech-card,
-    .portfolio-card {
-      position: relative;
-      text-align: center;
-      overflow: hidden;
-      border-radius: 8px;
-      background: white;
-      height: 200px;
-      padding: 1rem;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    a.tech-card,
-    a.portfolio-card {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .portfolio-card:hover,
-    .tech-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Portfolio Image */
-    .portfolio-img {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .tech-card img,
-    .portfolio-img img {
-      max-height: 100px;
-      border-radius: 8px;
-      object-fit: contain;
-      display: block;
-      margin: auto;
-      transition: transform 0.3s ease;
-    }
-
-    .tech-card span,
-    .portfolio-info h3 {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 4px 12px;
-      font-size: 0.85rem;
-      border-radius: 4px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .tech-card:hover span,
-    .portfolio-card:hover .portfolio-info h3 {
-      opacity: 1;
-    }
-
-    .portfolio-info h3 {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: #000;
-      transition: color 0.3s ease;
-    }
-
-    /* View Button */
-    .view-btn {
-      display: none;
-      margin-top: 0.4rem;
-      padding: 0.3rem 1rem;
-      font-size: 0.85rem;
-      background: #0a66c2;
-      color: white;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .portfolio-card:hover .view-btn {
-      display: inline-block;
-    }
-
-    .view-btn:hover {
-      background: #004182;
-    }
-
-    .portfolio-card.coming-soon .view-btn {
-      display: none !important;
-    }
-
-    .coming-soon p {
-      color: #666;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-      transition: color 0.3s ease;
-    }
-
-    /* Theme Switcher with Icons */
-    .theme-switcher {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 8px;
-      border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      cursor: pointer;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .theme-icon {
-      font-size: 20px;
-      transition: all 0.3s ease;
-    }
-
-    .sun-icon {
-      display: block;
-      color: #f39c12;
-    }
-
-    .moon-icon {
-      display: none;
-      color: #34495e;
-    }
-
-    /* Dark Mode Styles */
-    body.dark-mode {
-      background-color: #121212;
-      color: #e0e0e0;
-    }
-
-    body.dark-mode .layout {
-      background-color: #1e1e1e;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.3);
-    }
-
-    body.dark-mode h2 {
-      color: #ffffff;
-    }
-
-    body.dark-mode .section-divider {
-      background-color: rgba(255, 255, 255, 0.08);
-    }
-
-    body.dark-mode .tech-card,
-    body.dark-mode .portfolio-card {
-      background-color: #2d2d2d;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-
-    body.dark-mode .portfolio-info h3 {
-      color: #ffffff;
-    }
-
-    body.dark-mode .coming-soon p {
-      color: #aaaaaa;
-    }
-
-    body.dark-mode .theme-switcher {
-      background: rgba(30, 30, 30, 0.9);
-    }
-
-    body.dark-mode .sun-icon {
-      display: none;
-    }
-
-    body.dark-mode .moon-icon {
-      display: block;
-    }
-
-    /* Responsive Layout */
-    @media screen and (max-width: 768px) {
-      .main-content {
-        padding: 1rem;
-      }
-    
-      .card-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      }
-    
-      .layout {
-        box-shadow: none;
-      }
-
-      .theme-switcher {
-        top: 10px;
-        right: 10px;
-        width: 36px;
-        height: 36px;
-      }
-    }
-  </style>
-</head>
-<body class="light-mode">
-  <!-- Theme Switcher with Icons -->
-  <div class="theme-switcher" id="themeSwitcher">
-    <span class="theme-icon sun-icon">☀️</span>
-    <span class="theme-icon moon-icon">🌙</span>
-  </div>
-
-  <div class="layout">
-    <!-- Main Content Only -->
-    <main class="main-content">
-      <!-- Portfolio Section -->
-      <section class="portfolio-section">
-        <h2>Portfolio View</h2>
-        <div class="section-divider"></div>
-
-        <div class="card-grid">
-          <!-- Portfolio 1-->
-          <a href="portfolio/view1/index.html" class="portfolio-card">
-            <div class="portfolio-img">
-              <img src="portfolio/view1/src/snap.jpeg" alt="Portfolio 1 Snapshot" />
-            </div>
-            <div class="portfolio-info">
-              <h3>Last Update on : Dec'2025</h3>
-            </div>
-          </a>
-        </div>
-      </section>
-
-      <!-- Technology Section -->
-      <section class="tech-section">
-        <h2>Concepts</h2>
-        <div class="section-divider"></div>
-        <div class="card-grid">
-            <a href="Concepts/01. Power BI VertiPaq Engine Interactive Guide.html" class="tech-card">
-              <img src="assets/Vertipaq Engine.gif" alt="VertiPaq Engine">
-              <span>VertiPaq Engine</span>
-            </a>
-
-            <a href="Concepts/02. DAX Engines Explained The Library Analogy_2.html" class="tech-card">
-              <img src="assets/DAX Query Model.gif" alt="PowerShell">
-              <span>DAX Engine</span>
-            </a>
-
-            <a href="Concepts/03. Query Folding Explained.html" class="tech-card">
-              <img src="assets/QueryFolding.gif" alt="PowerShell">
-              <span>Query Folding</span>
-            </a>
-          
-          <!-- <div class="tech-card"><img src="assets/excel.png" alt="Excel"><span>Excel</span></div>
-          <div class="tech-card"><img src="assets/vba.png" alt="VBA"><span>VBA</span></div> -->
-
-            <!-- <div class="tech-card"><img src="assets/access.png" alt="Access"><span>Access</span></div>
-          <div class="tech-card"><img src="assets/sql.png" alt="SQL"><span>SQL</span></div> -->
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const themeSwitcher = document.getElementById('themeSwitcher');
-      const body = document.body;
-
-      // Check for saved theme preference
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        body.classList.add('dark-mode');
-      }
-
-      // Theme toggle event
-      themeSwitcher.addEventListener('click', function() {
-        if (body.classList.contains('dark-mode')) {
-          body.classList.remove('dark-mode');
-          localStorage.setItem('theme', 'light');
-        } else {
-          body.classList.add('dark-mode');
-          localStorage.setItem('theme', 'dark');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanveer Alam Sheikh - Data Analyst & BI Specialist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-inter {
+            font-family: 'Inter', sans-serif;
         }
-      });
-    });
-  </script>
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-10px);
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .tech-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .data-gradient {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+        }
+
+        .skill-bar {
+            transition: width 2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="text-2xl font-bold text-gray-900 hover-scale cursor-pointer">
+                    <!-- <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">My Portfolio</span> -->
+                    <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"></span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-sm font-medium text-blue-600 bg-blue-50 px-4 py-2 rounded-full hover:bg-blue-100 transition-colors">ABOUT</a>
+                    <a href="#experience" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">EXPERIENCE</a>
+                    <a href="#skills" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">SKILLS</a>
+                    <a href="#projects" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">PROJECTS</a>
+                    <a href="#contact" class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">CONTACT</a>
+                </nav>
+
+                <!-- Contact Info -->
+                <div class="hidden md:flex items-center space-x-2 text-gray-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <!-- <span class="text-sm font-medium">tanveeralamsheikh92@gmail.com</span> -->
+                    <a href="mailto:tanveeralamsheikh92@gmail.com">Gmail</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-100 hidden">
+            <div class="px-6 py-6 space-y-4">
+                <a href="#about" class="block text-sm font-medium text-blue-600">ABOUT</a>
+                <a href="#experience" class="block text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">EXPERIENCE</a>
+                <a href="#skills" class="block text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">SKILLS</a>
+                <a href="#projects" class="block text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">PROJECTS</a>
+                <a href="#contact" class="block text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">CONTACT</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="about" class="pt-32 pb-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-10 w-32 h-32 bg-blue-500 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-40 h-40 bg-purple-400 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="space-y-8 animate-slide-in-left">
+                    <div>
+                        <h1 class="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                            Hey There,<br />
+                            <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">I'm Tanveer Alam</span>
+                        </h1>
+                    </div>
+
+                    <div class="space-y-4">
+                        <p class="text-xl text-gray-700 leading-relaxed">
+                            Data Analyst & BI Specialist with expertise in data visualization, transformation, and automation.
+                        </p>
+                        
+                        <div class="flex items-center space-x-2 text-blue-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <!-- <span class="font-medium">tanveeralamsheikh92@gmail.com</span> -->
+                            <a href="mailto:tanveeralamsheikh92@gmail.com">tanveeralamsheikh92@gmail.com</a>
+                        </div>
+
+                        <div class="flex items-center space-x-2 text-gray-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="font-medium">Thane, India</span>
+                        </div>
+                    </div>
+
+                    <!-- Experience Badge -->
+                    <div class="inline-flex items-center space-x-4 bg-white rounded-2xl p-6 shadow-lg hover-scale">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-blue-600">11+</div>
+                            <div class="text-sm text-gray-600 font-medium">
+                                YEARS<br />EXPERIENCE
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content - Profile Image -->
+                <div class="relative animate-slide-in-right">
+                    <div class="relative">
+                        <!-- Decorative Background -->
+                        <div class="absolute inset-0 gradient-bg rounded-3xl transform rotate-6"></div>
+                        <div class="absolute inset-0 data-gradient rounded-3xl transform -rotate-3"></div>
+                        
+                        <!-- Profile Image -->
+                        <div class="relative bg-white rounded-3xl p-8 shadow-2xl">
+                            <img
+                                src="assets/github_avatar.jpg"
+                                alt="Tanveer Alam Sheikh"
+                                class="w-full h-96 object-scale-down rounded-3x1"
+                            />
+                        </div>
+
+                        <!-- Microsoft Certification Badge -->
+                        <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl p-4 shadow-xl animate-float">
+                            <div class="flex items-center space-x-3">
+                                <img src="assets/DP600 badge.png" alt="Microsoft Power BI Data Analyst" class="w-16 h-16" />
+                                <div>
+                                    <div class="text-xs text-gray-500 font-medium">MICROSOFT CERTIFIED</div>
+                                    <div class="text-sm font-bold text-gray-900">Fabric Analytics Engineer</div>
+                                    <div class="text-xs text-blue-600">ASSOCIATE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                    Technical Skills & Expertise
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Specialized in data analysis, business intelligence, and process automation with hands-on experience in enterprise solutions.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Data Analysis -->
+                <div class="bg-gray-50 rounded-2xl p-8 hover-lift">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900">Data Analysis</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 font-medium">Power BI</span>
+                                <span class="text-gray-500">87.5%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-blue-600 h-2 rounded-full" style="width: 87.5%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 font-medium">Power Query</span>
+                                <span class="text-gray-500">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-blue-600 h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 font-medium">DAX</span>
+                                <span class="text-gray-500">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-blue-600 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-700 font-medium">Store Procedure</span>
+                                <span class="text-gray-500">75%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="skill-bar bg-blue-600 h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Data Tools -->
+                <div class="bg-gray-50 rounded-2xl p-8 hover-lift">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900">Data Tools</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Microsoft Fabric</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Power BI</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">SQL</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Advanced Excel</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Excel VBA</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Power Pivot</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Power Query</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">PowerShell</span>
+                    </div>
+                </div>
+
+                <!-- Other Skills -->
+                <div class="bg-gray-50 rounded-2xl p-8 hover-lift">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900">Other Skills</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Data Modeling</span>
+                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Data Visualization</span>
+                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Data Storytelling</span>
+                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Data Transformation</span>
+                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Process Automation</span>
+                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Data Governance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                    Professional Experience
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Building data-driven solutions across various industries and domains.
+                </p>
+            </div>
+
+            <div class="space-y-8">
+                <!-- Experience Item 1 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-slide-in-left">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                        <div class="flex items-center space-x-4 mb-4 lg:mb-0">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Assistant Manager</h3>
+                                <div class="flex items-center space-x-4 text-gray-600 text-sm">
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                        </svg>
+                                        <span>Tata Consultancy Services</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>Aug 2024 - Present</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <ul class="list-disc text-gray-700 leading-relaxed pl-5 space-y-2">
+                                <li>Collaborated with cross-functional teams and client accounts to deliver 20+ tailored reports</li>
+                                <li>Enhanced ETL processes and data governance tools, reducing processing time by 25%</li>
+                                <li>Introduced Medallion architecture to standardize development workflows</li>
+                                <li>Engineered scalable data warehouses and pipelines using Microsoft Fabric</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-slide-in-right">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                        <div class="flex items-center space-x-4 mb-4 lg:mb-0">
+                            <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Business Process Lead</h3>
+                                <div class="flex items-center space-x-4 text-gray-600 text-sm">
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                        </svg>
+                                        <span>Tata Consultancy Services</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>Aug 2018 - Jul 2024</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <ul class="list-disc text-gray-700 leading-relaxed pl-5 space-y-2">
+                                <li>Provided data-driven insights to leadership, optimizing business decisions</li>
+                                <li>Automated 12+ reporting workflows, cutting manual effort by 40%</li>
+                                <li>Ensured data governance and compliance across reports and dashboards</li>
+                                <li>Replaced error-prone Excel reporting with automation, eliminating 90% of manual errors</li>
+                                <li>Developed multiple tools and Excel-based applications to optimize business processes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Item 3 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-slide-in-left">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                        <div class="flex items-center space-x-4 mb-4 lg:mb-0">
+                            <div class="w-4 h-4 bg-purple-500 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Analyst - Business Planning & MI</h3>
+                                <div class="flex items-center space-x-4 text-gray-600 text-sm">
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                        </svg>
+                                        <span>Capita India Private Limited</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>Jan 2018 - Jul 2018</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <ul class="list-disc text-gray-700 leading-relaxed pl-5 space-y-2">
+                                <li>Worked in the MIS team, gaining exposure to report creation and data analysis</li>
+                                <li>Learned and applied Advanced Excel and VBA to automate reporting processes</li>
+                                <li>Developed understanding of how MIS functions and its impact on business decisions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Item 4 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-slide-in-right">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                        <div class="flex items-center space-x-4 mb-4 lg:mb-0">
+                            <div class="w-4 h-4 bg-cyan-500 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Executive Insurance</h3>
+                                <div class="flex items-center space-x-4 text-gray-600 text-sm">
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                        </svg>
+                                        <span>Capita India Private Limited</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>Apr 2015 - Dec 2017</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <ul class="list-disc text-gray-700 leading-relaxed pl-5 space-y-2">
+                                <li>Handled customer requests in a backend, back-office environment</li>
+                                <li>Processed requests received in the form of letters</li>
+                                <li>Gained in-depth understanding of business operations and the insurance domain</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Experience Item 5 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-slide-in-right">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                        <div class="flex items-center space-x-4 mb-4 lg:mb-0">
+                            <div class="w-4 h-4 bg-pink-500 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Junior Executive</h3>
+                                <div class="flex items-center space-x-4 text-gray-600 text-sm">
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                        </svg>
+                                        <span>DHL Logistics Pvt. Ltd.</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <span>Sep 2014 - Mar 2015</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <ul class="list-disc text-gray-700 leading-relaxed pl-5 space-y-2">
+                                <li>Handled Ocean Freight operations</li>
+                                <li>Oversaw shipment coordination, documentation, and logistics management</li>
+                                <li>Ensured efficient international freight movement</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                    Key Projects
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Showcasing real-world applications of data analysis and business intelligence.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="group cursor-pointer animate-fade-in">
+                    <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl p-8 h-80 relative overflow-hidden hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-2">Central MI Dashboard</h3>
+                                    <p class="text-white/80">Power BI Solution</p>
+                                </div>
+                                <!-- <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover-scale">
+                                    <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </div> -->
+                            </div>
+                            
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4">
+                                    <p class="text-white text-sm">Built a Power BI dashboard consolidating business data across multiple accounts into a single view.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="group cursor-pointer animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="bg-gradient-to-br from-green-500 to-teal-600 rounded-3xl p-8 h-80 relative overflow-hidden hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-2">Fabric Governance Tool</h3>
+                                    <p class="text-white/80">PowerShell & Power BI</p>
+                                </div>
+                                <!-- <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover-scale">
+                                    <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </div> -->
+                            </div>
+                            
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4">
+                                    <p class="text-white text-sm">Developed a Fabric tenant administration tool using PowerShell and Power BI for monitoring and governance.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="group cursor-pointer animate-fade-in" style="animation-delay: 0.4s;">
+                    <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl p-8 h-80 relative overflow-hidden hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-2">Production Tracker</h3>
+                                    <p class="text-white/80">Power BI Monitoring</p>
+                                </div>
+                                <!-- <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover-scale">
+                                    <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </div> -->
+                            </div>
+                            
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4">
+                                    <p class="text-white text-sm">Replaced Microsoft Purview with an in-house monitoring tool for Power BI reports, improving efficiency.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Project 4 -->
+                <div class="group cursor-pointer animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="bg-gradient-to-br from-cyan-500 to-blue-600 rounded-3xl p-8 h-80 relative overflow-hidden hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-2">Quality Tool</h3>
+                                    <p class="text-white/80">Excel VBA & Access Database</p>
+                                </div>
+                                <!-- <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover-scale">
+                                    <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </div> -->
+                            </div>
+                            
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4">
+                                    <p class="text-white text-sm">Developed an auditing workflow system, saving 1.5 FTE effort and reducing biased auditing.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Project 5 -->
+                <div class="group cursor-pointer animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="bg-gradient-to-br from-red-400 to-red-800 rounded-3xl p-8 h-80 relative overflow-hidden hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-2">Learning Module Tool</h3>
+                                    <p class="text-white/80">Excel VBA & Access Database</p>
+                                </div>
+                                <!-- <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover-scale">
+                                    <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </div> -->
+                            </div>
+                            
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4">
+                                    <p class="text-white text-sm">Created a training tracker for compliance, ensuring timely course completion.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="group cursor-pointer animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-3xl p-8 h-80 relative overflow-hidden hover-lift">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-2">KPI Tool</h3>
+                                    <p class="text-white/80">Excel VBA & Access Database</p>
+                                </div>
+                                <!-- <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover-scale">
+                                    <svg class="w-4.5 h-4.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </div> -->
+                            </div>
+                            
+                            <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4">
+                                    <p class="text-white text-sm">Automated KPI tracking across teams, integrating performance metrics.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Certifications -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 animate-fade-in">
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                    Education & Certifications
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Education -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Education</h3>
+                    <div class="space-y-6">
+                        <!-- Education Graduation-->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-900">Bachelor in Management Studies</h4>
+                                <p class="text-gray-600">Mumbai University</p>
+                                <p class="text-gray-500 text-sm">2014</p>
+                            </div>
+                        </div>
+                        <!-- Education 12th-->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-900">XII (Higher Secondary)</h4>
+                                <p class="text-gray-600">Maharastra Board</p>
+                                <p class="text-gray-500 text-sm">2011</p>
+                            </div>
+                        </div>
+                        <!-- Education 10th-->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-900">X (Secondary)</h4>
+                                <p class="text-gray-600">CBSE Board</p>
+                                <p class="text-gray-500 text-sm">2008</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Certifications</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-900">Microsoft Certified: Power BI Data Analyst Associate</h4>
+                                <p class="text-gray-600">Microsoft (PL-300)</p>
+                                <a href="https://learn.microsoft.com/api/credentials/share/en-us/TanveerAlamSheikh-9479/DF28C7C0407B7449?sharingId=E64A0AE804B15C53" class="text-blue-600 text-sm hover:underline">View Credential</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-900">Microsoft Certified: Fabric Analytics Engineer Associate</h4>
+                                <p class="text-gray-600">Microsoft (DP-600)</p>
+                                <a href="https://learn.microsoft.com/api/credentials/share/en-us/TanveerAlamSheikh-9479/3E4687F376E3CF36?sharingId=E64A0AE804B15C53" class="text-blue-600 text-sm hover:underline">View Credential</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-900">Lean Green Belt</h4>
+                                <p class="text-gray-600">Process improvement certification</p>
+                                <!-- <a href="https://learn.microsoft.com/api/credentials/share/en-us/TanveerAlamSheikh-9479/3E4687F376E3CF36?sharingId=E64A0AE804B15C53" class="text-blue-600 text-sm hover:underline">View Credential</a> -->
+                            </div>
+                        </div>
+
+                        <!-- <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <div> -->
+                                <!-- <h4 class="text-lg font-semibold text-gray-900">Contextual Master</h4> -->
+                                <!-- <p class="text-gray-600">Expertise in Business Intelligence</p> -->
+                                <!-- <a href="https://learn.microsoft.com/api/credentials/share/en-us/TanveerAlamSheikh-9479/3E4687F376E3CF36?sharingId=E64A0AE804B15C53" class="text-blue-600 text-sm hover:underline">View Credential</a> -->
+                            <!-- </div>
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left - Contact Info -->
+                <div class="space-y-8 animate-slide-in-left">
+                    <div>
+                        <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                            Let's collaborate on
+                            <br />
+                            <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">data-driven solutions.</span>
+                        </h2>
+                        <p class="text-xl text-gray-700 mb-8">
+                            Ready to transform your data into <span class="text-blue-600 font-semibold">actionable insights</span>
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">Location</div>
+                                <div class="text-gray-600">Thane, India</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">Phone</div>
+                                <div class="text-gray-600">+91 7678035451</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">Email</div>
+                                <a href="mailto:tanveeralamsheikh92@gmail.com">
+                                    <div class="text-gray-600">tanveeralamsheikh92@gmail.com</div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-900">LinkedIn</div>
+                                <a href="https://www.linkedin.com/in/tanveeralamsheikh/" target="_blank">
+                                    <div class="text-gray-600">linkedin.com/in/tanveeralamsheikh</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right - Contact Form -->
+               <!-- <div class="bg-gray-50 rounded-3xl p-8 animate-slide-in-right">
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <input
+                                    type="text"
+                                    placeholder="Your Name"
+                                    class="w-full px-4 py-4 bg-white rounded-xl border border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    type="email"
+                                    placeholder="Your Email"
+                                    class="w-full px-4 py-4 bg-white rounded-xl border border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Subject"
+                                class="w-full px-4 py-4 bg-white rounded-xl border border-gray-200 focus:border-blue-500 focus:outline-none transition-colors"
+                            />
+                        </div>
+
+                        <div>
+                            <textarea
+                                rows="6"
+                                placeholder="Your Message"
+                                class="w-full px-4 py-4 bg-white rounded-xl border border-gray-200 focus:border-blue-500 focus:outline-none transition-colors resize-none"
+                            ></textarea>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover-scale"
+                        >
+                            Send Message
+                        </button>
+                    </form>
+                </div> -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-6 md:mb-0 animate-fade-in">
+                    <div class="text-2xl font-bold mb-2">
+                        <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Tanveer Alam Sheikh</span>
+                    </div>
+                    <p class="text-gray-400">© 2024. All Rights Reserved</p>
+                </div>
+
+                <div class="text-gray-400 animate-fade-in" style="animation-delay: 0.2s;">
+                    Data Analyst & BI Specialist
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                // Close mobile menu if open
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.animate-fade-in, .animate-slide-in-left, .animate-slide-in-right').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Skill bar animation
+        const skillBars = document.querySelectorAll('.skill-bar');
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bar = entry.target;
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        skillBars.forEach(bar => {
+            skillObserver.observe(bar);
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! I\'ll get back to you soon.');
+        });
+    </script>
 </body>
 </html>
